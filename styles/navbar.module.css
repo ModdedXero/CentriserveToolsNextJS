@@ -1,0 +1,30 @@
+.mx_navbar {
+    position: sticky;
+    top: 0;
+    padding: 20px 0;
+
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
+    background: #333f4442;
+    backdrop-filter: saturate(180%) blur(10px);
+}
+
+.mx_navbar_container {
+    list-style: none;
+    display: flex;
+    gap: 50px;
+    margin: 0;
+    padding: 0 60px;
+}
+
+.mx_navbar_group {
+    display: flex;
+    gap: 20px;
+}
+
+.mx_navbar_dropdown {
+
+}
+
+.mx_navbar_dropdown div {
+    
+}

@@ -1,3 +1,16 @@
+
+:root {
+  --mx-white: #fefefefe;
+  --mx-color-bg: radial-gradient(var(--color-0), var(--color-1));
+
+  --color-0: #14262d;
+  --color-1: #1A1A1B;
+  --color-2: #333F44;
+  --color-3: #37AA9C;
+  --color-4: #94F3E4;
+  --color-5: #E4E4E4;
+}
+
 html,
 body {
   padding: 0;
@@ -10,15 +23,66 @@ a {
   color: inherit;
   text-decoration: none;
 }
+a:hover {
+  color: #37AA9C;
+}
 
 * {
   box-sizing: border-box;
 }
 
-.page-container {
-  min-height: 100vh;
+div.center {
+  margin: auto;
 }
 
-#mainNav.navbar-shrink {
-  box-shadow: 0 0 20px 6px var(--bs-black);
+div.box {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.right {
+  margin-left: auto;
+}
+
+div.blur {
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
+  background: #333f4442;
+  backdrop-filter: saturate(180%) blur(10px);
+}
+
+.page-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  color: var(--mx-white);
+  background: var(--mx-color-bg);
+}
+
+.page-wrapper { 
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.motd {
+  height: 200px;
+  width: 300px;
+  padding: 20px;
+  text-align: center;
+
+  border: 1px solid var(--color-3);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
+
+  background: #333f4442;
+  backdrop-filter: saturate(180%) blur(10px);
+  z-index: 2;
 }

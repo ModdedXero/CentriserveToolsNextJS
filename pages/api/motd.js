@@ -1,5 +1,5 @@
 import Motd from "../../models/motd";
-import dbConnect from "../../lib/dbConnector";
+import dbConnect from "../../lib/db_connector";
 
 export default async function handler(req, res) {
     await dbConnect();

@@ -1,0 +1,38 @@
+.mx_select {
+    position: relative;
+}
+
+.mx_select input:focus ~ .mx_select_container,
+.mx_select:hover .mx_select_container {
+    display: flex;
+}
+
+.mx_select_container {
+    display: none;
+    z-index: 100;
+    flex-direction: column;
+    position: absolute;
+    background-color: var(--bs-secondary);
+    padding-top: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.mx_select_item {
+    display: flex;
+    color: white;
+    gap: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.mx_select_item:hover {
+    background-color:black;
+}
+
+.mx_select_item p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    margin: auto 0;
+}

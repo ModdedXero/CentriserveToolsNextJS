@@ -1,29 +1,29 @@
-import { useEffect, useState } from "react";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import Link from "next/link";
+
+import styles from "../styles/navbar.module.css";
 
 export default function SiteNavbar() {
-    const [isNavTop, setNavTop] = useState(true);
-
-    useEffect(() => {
-        window.onscroll = () => {
-            if (window.scrollY === 0) setNavTop(true);
-            else setNavTop(false);
-        }
-    });
-
     return (
-        <Navbar className={`${!isNavTop ? "navbar-shrink" : ""}`} id="mainNav" variant="light" expand="lg" sticky="top">
-            <Container>
-                <Navbar.Brand href="#home">CSIT Tools</Navbar.Brand>
-                <Nav className="me-auto">
-                    <Nav.Link href="#home">Home</Nav.Link>
-                    <NavDropdown title="Agents" id="agentsDropdownNav">
-                        <NavDropdown.Item href="#chart">Chart</NavDropdown.Item>
-                        <NavDropdown.Item href="#reports">Reports</NavDropdown.Item>
-                    </NavDropdown>
-                    <Nav.Link href="#downloads">Downloads</Nav.Link>
-                </Nav>
-            </Container>
-        </Navbar>
+        <nav className={styles.mx_navbar}>
+            <ul className={styles.mx_navbar_container}>
+                <li className={styles.mx_navbar_group}>
+                    <Link href="/">CSIT Tools</Link>
+                </li>
+                <li className={styles.mx_navbar_group}>
+                    <Link href="/">Home</Link>
+                    <div className={styles.mx_navbar_dropdown}>
+                        <button></button>
+                        <div>
+
+                        </div>
+                    </div>
+                    <Link href="/downloads">Downloads</Link>
+                    <Link href="/inventory">Inventory</Link>
+                </li>
+                <li className={styles.mx_navbar_group + " right"}>
+                    <Link href="/login">Login</Link>
+                </li>
+            </ul>
+        </nav>
     )
 }
