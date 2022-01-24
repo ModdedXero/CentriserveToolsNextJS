@@ -1,13 +1,19 @@
-import { Container, Navbar } from "react-bootstrap";
+import axios from "axios";
 
-export default function Home() {
+import SiteNavbar from "../components/site_navbar"
+
+export default function Home({ tag }) {
     return (
-        <div className="page-main">
-            <Navbar bg="primary" variant="dark" expand="lg">
-                <Container>
-
-                </Container>
-            </Navbar>
+        <div className="masthead">
+            <SiteNavbar />
         </div>
     )
+}
+
+export async function getStaticProps({ params }) {
+    const req = await axios.get("http://localhost:3000/api/motd");
+
+    return {
+        props: { tag: req.data }
+    }
 }

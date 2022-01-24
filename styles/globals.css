@@ -16,9 +16,9 @@ a {
 }
 
 .page-container {
-  padding: 0 2rem;
+  min-height: 100vh;
 }
 
-.page-main {
-  min-height: 100vh;
+#mainNav.navbar-shrink {
+  box-shadow: 0 0 20px 6px var(--bs-black);
 }
