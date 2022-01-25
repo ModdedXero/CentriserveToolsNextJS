@@ -5,17 +5,6 @@ const fs = require("../lib/file_saver");
 const DattoData = require("./datto_api");
 const SophosData = require("./sophos_api");
 
-/* Helper Functions */
-
-async function DownloadReport(res, repName) {
-  const file = await fs.IsFile(repName + ".xlsx", fs.FileTypes.Report);
-  if (file) {
-    res.sendFile(file);
-  } else {
-    res.status(401).json({ response: "Failed to retrieve report!" });
-  }
-}
-
 /* Report Generators */
 
 async function GenAllSitesAgentComparison() {
@@ -158,6 +147,20 @@ async function GetSitesTamperProtectionCheck() {
   return workbook;
 }
 
+async function GetTestCheck() {
+    const workbook = new ExcelJS.Workbook();
+
+    const sheet = workbook.addWorksheet("Test Sheet");
+
+    sheet.columns = [
+        { header: "Test", key: "testKey", width: 30 }
+    ];
+
+    sheet.addRow({ testKey: "Test Value" });
+
+    return workbook;
+}
+
 /* General Functions */
 
 // Method for comparing string alphabetical order
@@ -212,8 +215,10 @@ function GenerateComputerList(dattoDevices, sophosDevices) {
   return deviceList;
 }
 
+
+
 exports.GenSiteAgentComparison = GenSiteAgentComparison;
 exports.GenAllSitesAgentComparison = GenAllSitesAgentComparison;
 exports.GetSiteErrorAgentComparison = GetSiteErrorAgentComparison;
 exports.GetSitesTamperProtectionCheck = GetSitesTamperProtectionCheck;
-exports.DownloadReport = DownloadReport;
+exports.GetTestCheck = GetTestCheck;

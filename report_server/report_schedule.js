@@ -1,4 +1,3 @@
-const Blob = require("buffer").Blob;
 const fs = require("../lib/file_saver");
 
 const ReportGenerator = require("./report_gen");
@@ -17,19 +16,17 @@ async function Initialize() {
 
 async function GenerateReport(repGen, title) {
     const wb = await repGen();
-
     await wb.xlsx.writeBuffer()
         .then(async data => {
-            const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
-            await blob.arrayBuffer()
-                .then(async array => {
-                    fs.WriteFile(`${title}.xlsx`, Buffer.from(array), fs.FileTypes.Report);
-                })
-            })
-            .catch(err => console.log(err))
-        }
+            await fs.WriteFile(`${title}.xlsx`, data, fs.FileTypes.Report);
+        })
+}
 
 const Reports = [
+    {
+        title: "Test Report Check",
+        generator: () => {return ReportGenerator.GetTestCheck()}
+    },
     {
         title: "All Sites Tamper Protection Check",
         generator: () => {return ReportGenerator.GetSitesTamperProtectionCheck()}

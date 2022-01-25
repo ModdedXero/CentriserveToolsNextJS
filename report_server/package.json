@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "blob": "^0.1.0",
     "dotenv": "^14.3.0",
     "exceljs": "^4.3.0"
   }

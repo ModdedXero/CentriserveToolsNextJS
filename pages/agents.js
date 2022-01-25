@@ -50,6 +50,13 @@ export default function Agents({ sites }) {
         SelectSite(selectedSite);
     }
 
+    async function DownloadReport(url, title) {
+        await axios.get(`/api/agents/reports/${url}`, { responseType: "blob" })
+            .then(res => {
+                fileDownload(res.data, `${title}.xlsx`)
+            })
+    }
+
     return (
         <div className="page-container">
             <SiteNavbar />
@@ -81,14 +88,26 @@ export default function Agents({ sites }) {
                             Computers: {computers.comparison && computers.comparison.length}
                         </Button>
                         <Dropdown label="Download Report">
-                            <DropdownItem>
+                            <DropdownItem
+                                onClick={_ => DownloadReport("all-comparison", "All Sites Agent Comparison")}
+                            >
                                 Agent Comparison
                             </DropdownItem>
-                            <DropdownItem>
+                            <DropdownItem
+                                onClick={_ => DownloadReport("error-comparison", "All Sites Error Agent Comparison")}
+                            >
                                 Error Agent Comparison
                             </DropdownItem>
-                            <DropdownItem>
+                            <DropdownItem
+                                onClick={_ => DownloadReport("tamper-protection", "All Sites Tamper Protection Check")}
+
+                            >
                                 Tamper Protection Check
+                            </DropdownItem>
+                            <DropdownItem
+                                onClick={_ => DownloadReport("test", "Test Report Check")}
+                            >
+                                Test Report Check
                             </DropdownItem>
                         </Dropdown>
                     </NavGroup>
@@ -121,6 +140,7 @@ export default function Agents({ sites }) {
 
 import { getSites } from "./api/agents/sites";
 import { Dropdown, DropdownItem } from "../components/dropdown";
+import fileDownload from "js-file-download";
 
 export async function getStaticProps({ params }) {
     const req = await getSites();
