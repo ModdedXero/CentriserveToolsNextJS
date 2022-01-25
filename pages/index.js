@@ -1,7 +1,7 @@
 import axios from "axios";
-import { MxCanvas, RenderBox } from "../components/box_3d";
+import { MxCanvas, RenderBox } from "../components/built/box_3d";
 
-import SiteNavbar from "../components/site_navbar"
+import SiteNavbar from "../components/built/site_navbar"
 
 export default function Home({ tag }) {
     return (
@@ -11,6 +11,7 @@ export default function Home({ tag }) {
             <div className="page-wrapper">
                 <div className="motd center">
                     {tag}
+                    test
                 </div>
                 <div className="box">
                     <MxCanvas>
@@ -24,7 +25,7 @@ export default function Home({ tag }) {
     )
 }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     const req = await axios.get("http://localhost:3000/api/motd");
 
     return {

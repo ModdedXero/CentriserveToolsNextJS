@@ -1,3 +1,4 @@
+/* Base HTML Properties */
 
 :root {
   --mx-white: #fefefefe;
@@ -9,6 +10,10 @@
   --color-3: #37AA9C;
   --color-4: #94F3E4;
   --color-5: #E4E4E4;
+
+  --mx-blur-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.712);
+  --mx-blur-filter: saturate(180%) blur(10px);
+  --mx-blur-bg: #25353d9a;
 }
 
 html,
@@ -31,11 +36,31 @@ a:hover {
   box-sizing: border-box;
 }
 
-div.center {
+/* Webkit */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-2); 
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-3); 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-4); 
+}
+
+/* Decorators */
+
+.center {
   margin: auto;
 }
 
-div.box {
+.box {
   position: absolute;
 
   width: 100%;
@@ -47,17 +72,16 @@ div.box {
   margin-left: auto;
 }
 
-div.blur {
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
-  background: #333f4442;
-  backdrop-filter: saturate(180%) blur(10px);
-}
+/* Global Page Properties */
 
 .page-container {
-  position: relative;
+  position: fixed;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
 
   color: var(--mx-white);
   background: var(--mx-color-bg);
@@ -67,9 +91,9 @@ div.blur {
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 0;
+  width: 95vw;
+  height: 90vh;
+  margin: auto;
   padding: 0;
 }
 
@@ -80,9 +104,123 @@ div.blur {
   text-align: center;
 
   border: 1px solid var(--color-3);
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
-
-  background: #333f4442;
-  backdrop-filter: saturate(180%) blur(10px);
+  
+  box-shadow: var(--mx-blur-shadow);
+  background: var(--mx-blur-bg);
+  backdrop-filter: var(--mx-blur-filter);
   z-index: 2;
+}
+
+/* Input */
+
+.mx-input-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mx-input {
+  width: 100%;
+
+  position: relative;
+  width: 80%;
+  padding: 15px 0 0;
+  margin-top: 10px;
+
+  border: 0;
+  outline: 0;
+  border-bottom: 1px solid gray;
+  
+  font-size: 1.3rem;
+  color: white;
+  padding: 7px 0;
+  background: transparent;
+}
+.mx-input::placeholder {
+  color: transparent;
+}
+
+.mx-input:placeholder-shown ~ label {
+  display: block;
+  font-size: 1.4rem;
+  cursor: text;
+  top: 20px;
+}
+.mx-input + label {
+  position: absolute;
+  top: 0px;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+.mx-input:focus {
+  padding-bottom: 6px;  
+
+  border-width: 3px;
+  border-image: linear-gradient(to right, var(--color-2), var(--color-3));
+  border-image-slice: 1;
+}
+.mx-input:focus + label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.3s;
+  font-size: 0.8rem;
+  color: var(--color-4);
+  font-weight:700;
+}
+
+/* Button */
+
+.mx-btn {
+  position: relative;
+  background: none;
+  color: var(--color-5);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 0.2em solid var(--color-3);
+  padding: 0.5em 1em;
+
+  box-shadow: var(--mx-blur-shadow);
+  background: var(--mx-blur-bg);
+  backdrop-filter: var(--mx-blur-filter);
+}
+.mx-btn::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 10%;
+  background: var(--color-0);
+  height: 0.3em;
+  right: 20%;
+  top: -0.21em;
+  transform: skewX(-45deg);
+  -webkit-transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+  transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+}
+.mx-btn::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 10%;
+  background: var(--color-0);
+  height: 0.3em;
+  left: 20%;
+  bottom: -0.25em;
+  transform: skewX(45deg);
+  -webkit-transition: all 0.45 cubic-bezier(0.86, 0, 0.07, 1);
+  transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+}
+.mx-btn:hover::before {
+  right: 80%;
+}
+.mx-btn:hover::after {
+  left: 80%;
+}
+
+.mx-btn:active::after {
+  color: var(--color-4);
+  background-color: var(--color-3);
 }

@@ -4,7 +4,5 @@ import dbConnect from "../../lib/db_connector";
 export default async function handler(req, res) {
     await dbConnect();
 
-    const message = await Motd.find();
-
-    res.status(200).send(message[0].message || "No message");
+    res.status(200).send("No message");
 }

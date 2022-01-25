@@ -1,22 +1,31 @@
 .mx_select {
     position: relative;
+    width: 100%;
+}
+
+.mx_select input {
+    width: 100%;
 }
 
 .mx_select input:focus ~ .mx_select_container,
 .mx_select:hover .mx_select_container {
-    display: flex;
+    max-height: 300px;
 }
 
 .mx_select_container {
-    display: none;
+    display: flex;
     z-index: 100;
     flex-direction: column;
     position: absolute;
-    background-color: var(--bs-secondary);
-    padding-top: 10px;
-    max-height: 300px;
     overflow-y: auto;
     width: 100%;
+    max-height: 0px;
+
+    box-shadow: var(--mx-blur-shadow);
+    background: var(--mx-blur-bg);
+    backdrop-filter: var(--mx-blur-filter);
+
+    transition: all 0.25s ease-in-out;
 }
 
 .mx_select_item {
@@ -27,7 +36,7 @@
     cursor: pointer;
 }
 .mx_select_item:hover {
-    background-color:black;
+    background-color: var(--color-3);
 }
 
 .mx_select_item p {

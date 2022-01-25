@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import styles from "../styles/select.module.css"
 
-export default function Select({ options=[], onChange, defaultValue }) {
+export default function Select({ options=[], onChange, defaultValue, width }) {
     const [query, setQuery] = useState("");
     const [current, setCurrent] = useState(defaultValue || "Select");
 
     const [filteredOptions, setFilteredOptions] = useState([]);
+
+    const searchInputRef = useRef();
 
     useEffect(() => {
         const opt = [];
@@ -26,13 +28,22 @@ export default function Select({ options=[], onChange, defaultValue }) {
 
     function SelectItem(item) {
         setQuery("");
-        setCurrent(item);
-        onChange(item.value);
+        setCurrent(item.label);
+        if (onChange) onChange(item.value);
     }
 
     return (
-        <div className={styles.mx_select}>
-            <input placeholder="Select" onChange={OnQueryChange} type="search" />
+        <div className={styles.mx_select} style={{ width: width }}>
+            <div className="mx-input-group">
+                <input 
+                    className="mx-input" 
+                    ref={searchInputRef} 
+                    placeholder={current} 
+                    onChange={OnQueryChange} 
+                    style={{ width: width }}
+                />
+                <label onClick={_ => searchInputRef.current.focus()}>{current}</label>
+            </div>
             <div className={styles.mx_select_container}>
                 {
                     filteredOptions.sort((a, b) => a.label.localeCompare(b.label)).filter(item => {
