@@ -22,7 +22,7 @@
     max-height: 0px;
 
     box-shadow: var(--mx-blur-shadow);
-    background: var(--mx-blur-bg);
+    background: var(--mx-blur-bg-dark);
     backdrop-filter: var(--mx-blur-filter);
 
     transition: all 0.25s ease-in-out;

@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import { useState } from "react/cjs/react.development";
 import Button from "../button";
 import { TableBCell, TableRow } from "../table";
 
 export default function ChartTable({ device, filter }) {
     const [currentDevice, setCurrentDevice] = useState(GenerateInfo(device, filter));
+
+    useEffect(() => {
+        setCurrentDevice(GenerateInfo(device, filter));
+    }, [filter])
 
     function OpenDattoDevice() {
         if (device) window.open(device.datto.portalUrl);
@@ -13,6 +18,7 @@ export default function ChartTable({ device, filter }) {
         // Send API call to enable tamper protection
     }
 
+    if (!currentDevice) return null;
     return (
         <TableRow>
             <TableBCell>{currentDevice.hostname}</TableBCell>
@@ -56,9 +62,9 @@ function GenerateInfo(device, filter) {
         dattoLink: ""
     }
 
-    if (filter === "stable" && !device.isEqual) {
+    if (filter === "Stable Devices" && !device.isEqual) {
         return false;
-    } else if (filter === "error" && device.isEqual) {
+    } else if (filter === "Error Devices" && device.isEqual) {
         return false;
     }
 

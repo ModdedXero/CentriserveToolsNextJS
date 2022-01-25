@@ -11,10 +11,12 @@ export default function Chart({ sites }) {
     
     const [filter, setFilter] = useState("All Devices");
     const [computers, setComputers] = useState({});
+    const [dattoAgentLink, setDattoAgentLink] = useState();
 
     async function SelectSite(e) {
         setSelectedSite(e);
         setComputers({});
+        setDattoAgentLink(null);
 
         const resData = await axios.post(`/api/agents/devices`, { site: e });
 
@@ -23,37 +25,57 @@ export default function Chart({ sites }) {
         newSite.dattoCount = resData.data.dattoCount;
         newSite.comparison = resData.data.comparison;
 
+        newSite.comparison.some((comp) => {
+            if (comp.datto) {
+                setDattoAgentLink(comp.datto.siteUid);
+                return true;
+            }
+        });
+
         setComputers(newSite);
+    }
+
+    function DownloadAgent() {
+        if (dattoAgentLink)
+            window.open(`https://zinfandel.centrastage.net/csm/profile/downloadAgent/${dattoAgentLink}`);
+    }
+
+    function RefreshSite() {
+        SelectSite(selectedSite);
     }
 
     return (
         <div className="page-container">
             <SiteNavbar />
             <div className="page-wrapper">
-            <Navbar>
-                <NavGroup>
-                    <Select 
-                        options={sites} 
-                        onChange={i => SelectSite(i)} 
-                        width="400px"
-                    />
-                </NavGroup>
-                <NavGroup>
-                    <Select 
-                        defaultValue="All Devices"
-                        options={[ "All Devices", "Error Devices", "Stable Devices" ]} 
-                        onChange={i => setFilter(i)}
-                        width="180px"
-                    />
-                </NavGroup>
-                <NavGroup>
-                    <Button>Download Agent</Button>
-                    <Button>Refresh Site</Button>
-                    <Button disabled>
-                        Computer Count: {computers.comparison && computers.comparison.length}
-                    </Button>
-                </NavGroup>
-            </Navbar>
+                <Navbar>
+                    <NavGroup>
+                        <Select 
+                            options={sites} 
+                            onChange={i => SelectSite(i)} 
+                            width="calc(30vw)"
+                        />
+                    </NavGroup>
+                    <NavGroup>
+                        <Select 
+                            defaultValue="All Devices"
+                            options={[ "All Devices", "Error Devices", "Stable Devices" ]} 
+                            onChange={i => setFilter(i)}
+                            width="180px"
+                        />
+                    </NavGroup>
+                    <NavGroup>
+                        <Button onClick={_ => DownloadAgent()}>
+                            Download Agent
+                        </Button>
+                        <Button onClick={_ => RefreshSite()}>
+                            Refresh Site
+                        </Button>
+                        <Button disabled>
+                            Computer Count: {computers.comparison && computers.comparison.length}
+                        </Button>
+                    </NavGroup>
+                </Navbar>
                 <Table>
                     <TableHead>
                         <TableHCell>Hostname</TableHCell>

@@ -29,6 +29,7 @@ export default function Select({ options=[], onChange, defaultValue, width }) {
     function SelectItem(item) {
         setQuery("");
         setCurrent(item.label);
+        searchInputRef.current.value = "";
         if (onChange) onChange(item.value);
     }
 

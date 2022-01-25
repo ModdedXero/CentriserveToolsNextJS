@@ -8,7 +8,8 @@ export function Navbar({ children, zIndex }) {
     const navRef = useRef();
 
     useEffect(() => {
-        setSticky(navRef.current.offsetTop);
+        console.log(navRef.current.getBoundingClientRect())
+        setSticky(navRef.current.getBoundingClientRect().top);
     }, [])
 
     return (

@@ -12,6 +12,11 @@
     backdrop-filter: var(--mx-blur-filter);
 }
 
+.mx_table_wrapper thead {
+    position: sticky;
+    z-index: 3;
+}
+
 .mx_table_wrapper th {
     text-align: left;
     background-color: var(--color-0);
@@ -20,6 +25,7 @@
 .mx_table_wrapper td, .mx_table_wrapper th {
     border: 1px solid var(--color-2);
     text-align: center;
+    padding: 5px;
 }
 .mx_table_wrapper th {
     padding: 8px 0;

@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 import styles from "../styles/table.module.css";
 
 export function Table({ children }) {
@@ -11,8 +13,16 @@ export function Table({ children }) {
 }
 
 export function TableHead({ children }) {
+    const [sticky, setSticky] = useState();
+    const headRef = useRef();
+
+    useEffect(() => {
+        console.log(headRef.current.getBoundingClientRect())
+        setSticky(headRef.current.getBoundingClientRect().top - 0.1);
+    }, [])
+
     return (
-        <thead>
+        <thead ref={headRef} style={{ top: sticky }}>
             <tr>
                 {children}
             </tr>

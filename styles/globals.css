@@ -14,6 +14,7 @@
   --mx-blur-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.712);
   --mx-blur-filter: saturate(180%) blur(10px);
   --mx-blur-bg: #25353d9a;
+  --mx-blur-bg-dark: #25353d;
 }
 
 html,
@@ -92,8 +93,8 @@ a:hover {
   flex-direction: column;
   position: relative;
   width: 95vw;
-  height: 90vh;
-  margin: auto;
+  height: auto;
+  margin: 0 auto;
   padding: 0;
 }
 
@@ -176,7 +177,6 @@ a:hover {
 
 .mx-btn {
   position: relative;
-  background: none;
   color: var(--color-5);
   text-transform: uppercase;
   text-decoration: none;
