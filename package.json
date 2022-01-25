@@ -5,7 +5,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run",
+    "e2e": "start-server-and-test start http://localhost:3000 cypress",
+    "e2e:headless": "start-server-and-test start http://localhost:3000 cypress:headless"
   },
   "dependencies": {
     "@react-three/fiber": "^7.0.25",
@@ -19,6 +24,7 @@
     "three": "^0.136.0"
   },
   "devDependencies": {
+    "cypress": "^9.3.1",
     "eslint": "8.7.0",
     "eslint-config-next": "^0.2.4"
   }

@@ -16,11 +16,7 @@ export default function Home({ tag }) {
                     test
                 </div>
                 <div className="box">
-                    <MxCanvas>
-                        {RenderCubes().map((cube) => {
-                            return cube;
-                        })}
-                    </MxCanvas>
+                    
                 </div>
             </div>
         </div>

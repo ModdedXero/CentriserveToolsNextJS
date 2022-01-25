@@ -22,7 +22,7 @@ export default function Chart({ sites }) {
         setComputers({});
         setDattoAgentLink(null);
 
-        const resData = await axios.post(`/api/agents/devices`, { site: e });
+        const resData = await axios.post(`/api/agents/devices/${e}`);
 
         const newSite = {};
         newSite.sophosCount = resData.data.sophosCount;
