@@ -1,14 +1,18 @@
 import axios from "axios"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Navbar, NavGroup } from "../../components/navbar";
 import Select from "../../components/select";
 import SiteNavbar from "../../components/built/site_navbar";
+import ChartTable from "../../components/pages/chart_table";
+import Button from "../../components/button";
 import { Table, TableBody, TableHead, TableHCell } from "../../components/table";
 
 export default function Chart({ sites }) {
+    // Current Selected Site to display
     const [selectedSite, setSelectedSite] = useState();
     
+    // States set when a site is selected
     const [filter, setFilter] = useState("All Devices");
     const [computers, setComputers] = useState({});
     const [dattoAgentLink, setDattoAgentLink] = useState();
@@ -35,11 +39,13 @@ export default function Chart({ sites }) {
         setComputers(newSite);
     }
 
+    // Opens window with Datto Agent download for selected site
     function DownloadAgent() {
         if (dattoAgentLink)
             window.open(`https://zinfandel.centrastage.net/csm/profile/downloadAgent/${dattoAgentLink}`);
     }
 
+    // Refresh the devices for the selected site
     function RefreshSite() {
         SelectSite(selectedSite);
     }
@@ -103,8 +109,6 @@ export default function Chart({ sites }) {
 }
 
 import { getSites } from "../api/agents/sites";
-import ChartTable from "../../components/pages/chart_table";
-import Button from "../../components/button";
 
 export async function getStaticProps({ params }) {
     const req = await getSites();

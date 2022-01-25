@@ -1,6 +1,7 @@
 const axios = require("axios");
 const SophosAPI = require("../../../lib/sophos_api");
 
+// Retrieves Site List from Sophos of Site Names
 export async function getSites() {
     const sites =  await SophosAPI.GetSites();
     const siteNames = [];
@@ -11,6 +12,6 @@ export async function getSites() {
 }
 
 export default async function handler(req, res) {
-    const sites = await SophosAPI.GetSites();
+    const sites = await getSites();
     res.status(200).send(sites);
 }

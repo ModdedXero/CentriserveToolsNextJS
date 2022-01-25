@@ -1,6 +1,7 @@
 const SophosAPI = require("../../../lib/sophos_api");
 const DattoAPI = require("../../../lib/datto_api");
 
+// Retrieve Devices from Sophos and Datto and create comparison
 export default async function handler(req, res) {
     const sophosDevices = await SophosAPI.GetDevices(req.body.site);
     const dattoDevices = await DattoAPI.GetDevices(req.body.site);
@@ -12,6 +13,7 @@ export default async function handler(req, res) {
     });
 }
 
+// Parse Datto and Sophos devices and create comparison
 function GenerateComputerList(dattoDevices, sophosDevices) {
     const length = (sophosDevices ? sophosDevices.length : 0) + (dattoDevices ? dattoDevices.length : 0);
     let deviceList = [];
@@ -47,6 +49,7 @@ function GenerateComputerList(dattoDevices, sophosDevices) {
     return deviceList;
 }
 
+// Compare string alphebetically
 function strcmp(a, b) {
     if (a === b) return 0;
     if (a > b) return 1;
