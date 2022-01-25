@@ -98,6 +98,16 @@ a:hover {
   padding: 0;
 }
 
+.page-wrapper-full {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 95vw;
+  height: 95vh;
+  margin: 0 auto;
+  padding: 0;
+}
+
 .motd {
   height: 200px;
   width: 300px;

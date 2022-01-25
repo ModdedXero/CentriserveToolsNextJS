@@ -10,13 +10,17 @@ export default function Home({ tag }) {
         <div className="page-container">
             <SiteNavbar />
             
-            <div className="page-wrapper">
+            <div className="page-wrapper-full">
                 <div className="motd center">
                     {tag}
                     test
                 </div>
                 <div className="box">
-                    
+                    <MxCanvas>
+                        {RenderCubes().map((cube) => {
+                            return cube;
+                        })}
+                    </MxCanvas>
                 </div>
             </div>
         </div>
