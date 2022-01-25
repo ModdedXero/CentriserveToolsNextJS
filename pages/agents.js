@@ -1,10 +1,10 @@
 import axios from "axios"
 import { useState } from "react";
 
+import ChartTable from "../components/pages/agents/chart_table";
+import SiteNavbar from "../components/built/site_navbar";
 import { Navbar, NavGroup } from "../components/navbar";
 import Select from "../components/select";
-import SiteNavbar from "../components/built/site_navbar";
-import ChartTable from "../components/pages/chart_table";
 import Button from "../components/button";
 import { Table, TableBody, TableHead, TableHCell } from "../components/table";
 
@@ -129,7 +129,7 @@ export default function Agents({ sites }) {
                     <TableBody>
                         {computers.comparison &&
                         computers.comparison.map((comp, index) => {
-                            return <ChartTable key={index} device={comp} filter={filter} />
+                            return <ChartTable key={index} device={comp} filter={filter} refresh={RefreshSite} />
                         })}
                     </TableBody>
                 </Table>

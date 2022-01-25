@@ -1,9 +1,10 @@
+import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react/cjs/react.development";
-import Button from "../button";
-import { TableBCell, TableRow } from "../table";
+import Button from "../../button";
+import { TableBCell, TableRow } from "../../table";
 
-export default function ChartTable({ device, filter }) {
+export default function ChartTable({ device, filter, refresh }) {
     const [currentDevice, setCurrentDevice] = useState(GenerateInfo(device, filter));
 
     useEffect(() => {
@@ -15,7 +16,8 @@ export default function ChartTable({ device, filter }) {
     }
 
     async function EnableTamperProtection() {
-        // Send API call to enable tamper protection
+        await axios.post("/api/agents/enabletamper", { id: device.sophos.id, tenantId: device.sophos.tenant.id })
+            .then(_ => refresh())
     }
 
     if (!currentDevice) return null;
