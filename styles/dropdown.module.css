@@ -1,5 +1,13 @@
+.mx_dropdown {
+    position: relative;
+}
+
 .mx_dropdown:hover div {
     max-height: 1000px;
+}
+
+.mx_dropdown button {
+    height: 100%;
 }
 
 .mx_dropdown div {
@@ -7,6 +15,7 @@
     position: absolute;
     flex-direction: column;
     max-height: 0;
+    width: calc(100% + 50px);
     overflow: hidden;
 
     box-shadow: var(--mx-blur-shadow);

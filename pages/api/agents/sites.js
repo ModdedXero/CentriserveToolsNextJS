@@ -1,5 +1,4 @@
-const axios = require("axios");
-const SophosAPI = require("../../../lib/sophos_api");
+const SophosAPI = require("../../../lib/data/sophos_api");
 
 // Retrieves Site List from Sophos of Site Names
 export async function getSites() {

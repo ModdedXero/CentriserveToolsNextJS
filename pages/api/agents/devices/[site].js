@@ -1,5 +1,5 @@
-const SophosAPI = require("../../../../lib/sophos_api");
-const DattoAPI = require("../../../../lib/datto_api");
+const SophosAPI = require("../../../../lib/data/sophos_api");
+const DattoAPI = require("../../../../lib/data/datto_api");
 
 // Retrieve Devices from Sophos and Datto and create comparison
 export default async function handler(req, res) {
