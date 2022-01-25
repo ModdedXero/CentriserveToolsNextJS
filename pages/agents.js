@@ -1,14 +1,14 @@
 import axios from "axios"
 import { useState } from "react";
 
-import { Navbar, NavGroup } from "../../components/navbar";
-import Select from "../../components/select";
-import SiteNavbar from "../../components/built/site_navbar";
-import ChartTable from "../../components/pages/chart_table";
-import Button from "../../components/button";
-import { Table, TableBody, TableHead, TableHCell } from "../../components/table";
+import { Navbar, NavGroup } from "../components/navbar";
+import Select from "../components/select";
+import SiteNavbar from "../components/built/site_navbar";
+import ChartTable from "../components/pages/chart_table";
+import Button from "../components/button";
+import { Table, TableBody, TableHead, TableHCell } from "../components/table";
 
-export default function Chart({ sites }) {
+export default function Agents({ sites }) {
     // Current Selected Site to display
     const [selectedSite, setSelectedSite] = useState();
     
@@ -78,8 +78,19 @@ export default function Chart({ sites }) {
                             Refresh Site
                         </Button>
                         <Button disabled>
-                            Computer Count: {computers.comparison && computers.comparison.length}
+                            Computers: {computers.comparison && computers.comparison.length}
                         </Button>
+                        <Dropdown label="Download Report">
+                            <DropdownItem>
+                                Agent Comparison
+                            </DropdownItem>
+                            <DropdownItem>
+                                Error Agent Comparison
+                            </DropdownItem>
+                            <DropdownItem>
+                                Tamper Protection Check
+                            </DropdownItem>
+                        </Dropdown>
                     </NavGroup>
                 </Navbar>
                 <Table>
@@ -108,7 +119,8 @@ export default function Chart({ sites }) {
     )
 }
 
-import { getSites } from "../api/agents/sites";
+import { getSites } from "./api/agents/sites";
+import { Dropdown, DropdownItem } from "../components/dropdown";
 
 export async function getStaticProps({ params }) {
     const req = await getSites();

@@ -1,0 +1,33 @@
+.mx_dropdown:hover div {
+    max-height: 1000px;
+}
+
+.mx_dropdown div {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+
+    box-shadow: var(--mx-blur-shadow);
+    background: var(--mx-blur-bg-dark);
+    backdrop-filter: var(--mx-blur-filter);
+
+    transition: all 0.35s;
+}
+
+.mx_dropdown_item {
+    border: none;
+    text-align: left;
+    color: var(--color-5);
+    padding: 7px;
+    cursor: pointer;
+    font-size: 1em;
+    background-color: transparent;
+    
+    transition: all .25s;
+}
+.mx_dropdown_item:hover {
+    color: var(--color-3);
+    padding-left: 20px;
+}

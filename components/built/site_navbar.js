@@ -8,10 +8,7 @@ export default function SiteNavbar() {
             </NavGroup>
             <NavGroup>
                 <NavLink href="/">Home</NavLink>
-                <NavDropdown label="Agents">
-                    <NavLink href="/agents/chart">Chart</NavLink>
-                    <NavLink href="/agents/report">Report</NavLink>
-                </NavDropdown>
+                <NavLink href="/agents">Agents</NavLink>
                 <NavLink href="/downloads">Downloads</NavLink>
                 <NavLink href="/inventory">Inventory</NavLink>
             </NavGroup>

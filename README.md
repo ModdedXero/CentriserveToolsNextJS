@@ -6,7 +6,7 @@ and maintained by Blake Prejean.
 The application is Written with NextJS and MongoDB. REST API is managed
 by NextJS using Express.
 
-`npm run test:e2e` runs tests for the program and verifies API.
+`npm run cypress` or `npm run cypress:headless` runs tests for the program and verifies API.
 
 # REST API
 

@@ -58,7 +58,7 @@
     background: var(--mx-blur-bg);
     backdrop-filter: var(--mx-blur-filter);
 
-    transition: all 0.8s ease-in-out;
+    transition: all 0.35s ease-in-out;
 }
 
 .mx_navbar_dropdown div a {
