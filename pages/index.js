@@ -3,6 +3,8 @@ import { MxCanvas, RenderBox } from "../components/box_3d";
 
 import SiteNavbar from "../components/site_navbar"
 
+// Create CSIT from cubes
+
 export default function Home({ tag }) {
     return (
         <div className="page-container">
