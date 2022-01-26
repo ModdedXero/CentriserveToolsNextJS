@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import styles from "../styles/select.module.css"
 
-export default function Select({ options=[], onChange, defaultValue, width }) {
+export default function Select({ options=[], search=false, onChange, defaultValue, width }) {
     const [query, setQuery] = useState("");
     const [current, setCurrent] = useState(defaultValue || "Select");
 
@@ -27,10 +27,15 @@ export default function Select({ options=[], onChange, defaultValue, width }) {
     }
 
     function SelectItem(item) {
-        setQuery("");
-        setCurrent(item.label);
-        searchInputRef.current.value = "";
-        if (onChange) onChange(item.value);
+        if (search) {
+            setCurrent("Select");
+        } else {
+            setQuery("");
+            setCurrent(item.label);
+            searchInputRef.current.value = "";
+        }
+
+        if (onChange) onChange(item);
     }
 
     return (

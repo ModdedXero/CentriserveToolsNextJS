@@ -17,7 +17,6 @@ export function TableHead({ children }) {
     const headRef = useRef();
 
     useEffect(() => {
-        console.log(headRef.current.getBoundingClientRect())
         setSticky(headRef.current.getBoundingClientRect().top - 0.1);
     }, [])
 

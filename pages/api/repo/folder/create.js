@@ -1,4 +1,4 @@
-import FileStore from "../../../lib/data/file_store";
+import FileStore from "../../../../lib/data/file_store";
 
 export default async function handler(req, res) {
     const result = await FileStore.CreateFolder(req.body.folderName, req.body.path);

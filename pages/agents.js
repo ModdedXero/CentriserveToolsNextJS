@@ -1,11 +1,13 @@
 import axios from "axios"
 import { useState } from "react";
+import fileDownload from "js-file-download";
 
 import ChartTable from "../components/pages/agents/chart_table";
 import SiteNavbar from "../components/built/site_navbar";
 import { Navbar, NavGroup } from "../components/navbar";
 import Select from "../components/select";
 import Button from "../components/button";
+import { Dropdown, DropdownItem } from "../components/dropdown";
 import { Table, TableBody, TableHead, TableHCell } from "../components/table";
 
 export default function Agents({ sites }) {
@@ -65,7 +67,7 @@ export default function Agents({ sites }) {
                     <NavGroup>
                         <Select 
                             options={sites} 
-                            onChange={i => SelectSite(i)} 
+                            onChange={i => SelectSite(i.value)} 
                             width="calc(30vw)"
                         />
                     </NavGroup>
@@ -73,7 +75,7 @@ export default function Agents({ sites }) {
                         <Select 
                             defaultValue="All Devices"
                             options={[ "All Devices", "Error Devices", "Stable Devices" ]} 
-                            onChange={i => setFilter(i)}
+                            onChange={i => setFilter(i.value)}
                             width="180px"
                         />
                     </NavGroup>
@@ -133,9 +135,7 @@ export default function Agents({ sites }) {
     )
 }
 
-import { getSites } from "./api/agents/sites";
-import { Dropdown, DropdownItem } from "../components/dropdown";
-import fileDownload from "js-file-download";
+import { getSites } from "../pages/api/agents/sites";
 
 export async function getStaticProps({ params }) {
     const req = await getSites();

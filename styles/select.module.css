@@ -36,7 +36,10 @@
     cursor: pointer;
 }
 .mx_select_item:hover {
-    background-color: var(--color-3);
+    box-shadow: var(--mx-blur-shadow);
+    background: var(--mx-blur-bg-dark);
+    backdrop-filter: var(--mx-blur-filter);
+    background-color: var(--color-0);
 }
 
 .mx_select_item p {
@@ -44,4 +47,8 @@
     word-wrap: break-word;
     hyphens: auto;
     margin: auto 0;
+}
+
+.mx_select_body {
+    color: var(--color-3);
 }
