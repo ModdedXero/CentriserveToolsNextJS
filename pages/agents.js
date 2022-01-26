@@ -104,11 +104,6 @@ export default function Agents({ sites }) {
                             >
                                 Tamper Protection Check
                             </DropdownItem>
-                            <DropdownItem
-                                onClick={_ => DownloadReport("test", "Test Report Check")}
-                            >
-                                Test Report Check
-                            </DropdownItem>
                         </Dropdown>
                     </NavGroup>
                 </Navbar>
