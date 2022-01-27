@@ -1,27 +1,27 @@
 import axios from "axios";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 import { useRef } from "react";
+import Router from "next/router";
 
+import { useAuth } from "../../components/built/context";
 import { Form, FormGroup } from "../../components/form";
 import { Input } from "../../components/input";
 import Button from "../../components/button";
 import { MxCanvas, RenderBox } from "../../components/built/box_3d";
 
 export default function login() {
+    const { Login } = useAuth();
+
     const emailRef = useRef();
     const passwordRef = useRef();
 
     async function SubmitForm(e) {
         e.preventDefault();
 
-        const status = await signIn("credentials", {
-            redirect: false,
-            email: emailRef.current.value,
-            password: passwordRef.current.value
-        });
+        await Login(emailRef.current.value, passwordRef.current.value);
 
-        console.log(status);
+        // TODO: Check for errors and display them
+        Router.push("/");
     }
 
     return (

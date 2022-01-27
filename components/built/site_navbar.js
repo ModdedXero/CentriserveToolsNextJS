@@ -1,12 +1,12 @@
-import { signOut, useSession } from "next-auth/react";
+import Router from "next/router";
 
 import Button from "../button";
 import { Navbar, NavGroup, NavDropdown, NavLink } from "../navbar"
+import { useAuth } from "./context";
 
 export default function SiteNavbar() {
-    const { data: session } = useSession();
+    const { currentUser, Logout } = useAuth();
 
-    console
     return (
         <Navbar zIndex={1000}>
             <NavGroup>
@@ -19,8 +19,10 @@ export default function SiteNavbar() {
                 <NavLink href="/inventory">Inventory</NavLink>
             </NavGroup>
             <NavGroup align="right">
-                {!session && <NavLink href="/login">Login</NavLink>}
-                {session && <Button onClick={signOut}>Logout</Button>}
+                {!currentUser && 
+                <Button onClick={_ => Router.push("/login")}>Login</Button>}
+                {currentUser && 
+                <Button onClick={Logout}>Logout</Button>}
             </NavGroup>
         </Navbar>
     )

@@ -2,6 +2,7 @@ import axios from "axios"
 import { useState } from "react";
 import fileDownload from "js-file-download";
 
+import { SecureComponent } from "../components/built/context";
 import ChartTable from "../components/pages/agents/chart_table";
 import SiteNavbar from "../components/built/site_navbar";
 import { Navbar, NavGroup } from "../components/navbar";
@@ -11,8 +12,6 @@ import { Dropdown, DropdownItem } from "../components/dropdown";
 import { Table, TableBody, TableHead, TableHCell } from "../components/table";
 
 export default function Agents({ sites }) {
-    const { data: session } = useSession();
-
     // Current Selected Site to display
     const [selectedSite, setSelectedSite] = useState();
     
@@ -62,7 +61,7 @@ export default function Agents({ sites }) {
     }
 
     return (
-        <div className="page-container">
+        <SecureComponent>
             <SiteNavbar />
             <div className="page-wrapper">
                 <Navbar>
@@ -133,12 +132,11 @@ export default function Agents({ sites }) {
                     </TableBody>
                 </Table>
             </div>
-        </div>
+        </SecureComponent>
     )
 }
 
 import { getSites } from "../pages/api/agents/sites";
-import { useSession } from "next-auth/react";
 
 export async function getStaticProps({ params }) {
     const req = await getSites();
@@ -147,5 +145,3 @@ export async function getStaticProps({ params }) {
         props: { sites: req }
     }
 }
-
-Agents.auth = true;

@@ -3,24 +3,24 @@ import { useRef } from "react";
 import Link from "next/link";
 import Router from "next/router";
 
+import { useAuth } from "../../components/built/context";
 import { Form, FormGroup } from "../../components/form";
 import { Input } from "../../components/input";
 import Button from "../../components/button";
 import { MxCanvas, RenderBox } from "../../components/built/box_3d";
 
 export default function Signup() {
+    const { Signup } = useAuth();
+
     const emailRef = useRef();
     const passwordRef = useRef();
 
     async function SubmitForm(e) {
         e.preventDefault();
 
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
+        await Signup(emailRef.current.value, passwordRef.current.value);
 
-        const res = await axios.post("/api/auth/signup", { email: email, password: password });
-        const data = res.data;
-
+        // TODO: Check for errors and display them if needed
         Router.push("/login");
     }
 

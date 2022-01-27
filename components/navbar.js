@@ -51,6 +51,10 @@ export function NavDropdown({ label, children }) {
     )
 }
 
-export function NavLink({ href, children }) {
-    return <Link href={href}>{children}</Link>
+export function NavLink({ href, children, ...props}) {
+    return (
+        <div className={styles.mx_navbar_link} {...props}>
+            <Link href={href}>{children}</Link>
+        </div>
+    )
 }

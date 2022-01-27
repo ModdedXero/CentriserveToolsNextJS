@@ -17,7 +17,9 @@ const userSchema = new Schema({
         required: true
     },
     password: String,
-    security: [securitySchema]
+    security: [securitySchema],
+    hash: String,
+    lastLogin: Date
 });
 
 module.exports = mongoose.models.User || mongoose.model("User", userSchema);
