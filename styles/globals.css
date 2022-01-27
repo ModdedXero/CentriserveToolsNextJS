@@ -135,18 +135,19 @@ a:hover {
   width: 100%;
 
   position: relative;
-  width: 80%;
   padding: 15px 0 0;
   margin-top: 10px;
 
   border: 0;
   outline: 0;
-  border-bottom: 1px solid gray;
+  border-bottom: 3px solid gray;
   
   font-size: 1.3rem;
   color: white;
   padding: 7px 0;
   background: transparent;
+
+  transition: all 0.25s;
 }
 .mx-input::placeholder {
   color: transparent;
@@ -229,9 +230,4 @@ a:hover {
 }
 .mx-btn:hover::after {
   left: 80%;
-}
-
-.mx-btn:active::after {
-  color: var(--color-4);
-  background-color: var(--color-3);
 }

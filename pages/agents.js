@@ -11,6 +11,8 @@ import { Dropdown, DropdownItem } from "../components/dropdown";
 import { Table, TableBody, TableHead, TableHCell } from "../components/table";
 
 export default function Agents({ sites }) {
+    const { data: session } = useSession();
+
     // Current Selected Site to display
     const [selectedSite, setSelectedSite] = useState();
     
@@ -136,6 +138,7 @@ export default function Agents({ sites }) {
 }
 
 import { getSites } from "../pages/api/agents/sites";
+import { useSession } from "next-auth/react";
 
 export async function getStaticProps({ params }) {
     const req = await getSites();
@@ -144,3 +147,5 @@ export async function getStaticProps({ params }) {
         props: { sites: req }
     }
 }
+
+Agents.auth = true;

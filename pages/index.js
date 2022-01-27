@@ -27,14 +27,6 @@ export default function Home({ tag }) {
     )
 }
 
-export async function getServerSideProps({ params }) {
-    const req = await axios.get("http://localhost:3000/api/motd");
-
-    return {
-        props: { tag: req.data }
-    }
-}
-
 // Creates and randomizes cube positions
 function RenderCubes() {
     const cubes = [];
@@ -54,4 +46,12 @@ function RenderCubes() {
 // Returns random number between a range
 function getRandomNum(min, max) {
     return Math.random() * (max - min) + min;
+}
+
+export async function getServerSideProps({ params }) {
+    const req = await axios.get("http://localhost:3000/api/motd");
+
+    return {
+        props: { tag: req.data }
+    }
 }
