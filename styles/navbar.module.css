@@ -1,3 +1,5 @@
+/* Horizontal */
+
 .mx_navbar {
     position: sticky;
     top: 0;
@@ -12,41 +14,41 @@
 .mx_navbar_container {
     list-style: none;
     display: flex;
-    flex-flow: row;
     gap: 50px;
     margin: 0;
     padding: 0 60px;
 }
 
-.mx_navbar_group {
+.mx_navbar_container .mx_navbar_group {
+    position: relative;
     display: flex;
     gap: 20px;
 }
-.mx_navbar_group_right {
+.mx_navbar_container .mx_navbar_group_final {
     margin-left: auto;
 }
 
-.mx_navbar_dropdown {
+.mx_navbar_container .mx_navbar_dropdown {
     position: relative;
     display: inline-block;
 }
-.mx_navbar_dropdown:hover div,
-.mx_navbar_dropdown div:hover {
+.mx_navbar_container .mx_navbar_dropdown:hover div,
+.mx_navbar_container .mx_navbar_dropdown div:hover {
     max-height: 1000px;
 }
 
-.mx_navbar_dropdown button {
+.mx_navbar_container .mx_navbar_dropdown button {
     background-color: transparent;
     color: white;
     font-size: 16px;
     border: none;
     cursor: pointer;
 }
-.mx_navbar_dropdown button:hover {
+.mx_navbar_container .mx_navbar_dropdown button:hover {
     color: var(--color-3);
 }
 
-.mx_navbar_dropdown div {
+.mx_navbar_container .mx_navbar_dropdown div {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -61,6 +63,54 @@
     transition: all 0.35s ease-in-out;
 }
 
-.mx_navbar_dropdown div a {
+.mx_navbar_container .mx_navbar_dropdown div a {
     padding: 10px;
+}
+
+.mx_navbar_link {
+    position: relative;
+    height: auto;
+    margin: auto 0;
+}
+
+.mx_navbar_link p,
+.mx_navbar_link a {
+    margin: 0;
+}
+
+.mx_navbar_link p {
+    color: var(--color-3);
+    cursor: pointer;
+}
+
+/* Vertical */
+
+.mx_navbar_vertical {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: auto;
+
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.438); 
+    background: #333f4442;
+    backdrop-filter: saturate(180%) blur(10px);
+    z-index: 100;
+}
+
+.mx_navbar_container_vertical {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 50px;
+}
+
+.mx_navbar_container_vertical .mx_navbar_group,
+.mx_navbar_container_vertical .mx_navbar_group_final {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
+
+.mx_navbar_container_vertical .mx_navbar_group_final {
+    margin-top: auto;
 }

@@ -1,11 +1,12 @@
+import { GlassButton as Button } from "./button";
+import { Input } from "./input";
 import styles from "../styles/dropdown.module.css";
-import Button from "./button";
 
 export function Dropdown({ children, label }) {
     return (
         <div className={styles.mx_dropdown}>
-            <Button>{label}</Button>
-            <div>
+            <Input disabled placeholder={label}/>
+            <div className={styles.mx_dropdown_container}>
                 {children}
             </div>
         </div>

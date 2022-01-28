@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-import Button from "../../button";
+import {GlassButton as Button} from "../../button";
 import { TableBCell, TableRow } from "../../table";
 
 export default function ChartTable({ device, filter, refresh }) {

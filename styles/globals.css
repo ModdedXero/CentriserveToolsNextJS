@@ -12,6 +12,7 @@
   --color-5: #E4E4E4;
 
   --mx-blur-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.712);
+  --mx-blur-shadow-clear: 0 0 0.5rem 0;
   --mx-blur-filter: saturate(180%) blur(10px);
   --mx-blur-bg: #25353d9a;
   --mx-blur-bg-dark: #25353d;
@@ -26,14 +27,14 @@ body {
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 a:hover {
-  color: #37AA9C;
+  color: var(--color-3)
 }
 
 * {
+  color: var(--color-5);
   box-sizing: border-box;
 }
 
@@ -165,7 +166,7 @@ a:hover {
   display: block;
   transition: 0.2s;
   font-size: 1rem;
-  color: var(--color-text);
+  color: var(--color-5);
 }
 .mx-input:focus {
   padding-bottom: 6px;  
@@ -182,52 +183,4 @@ a:hover {
   font-size: 0.8rem;
   color: var(--color-4);
   font-weight:700;
-}
-
-/* Button */
-
-.mx-btn {
-  position: relative;
-  color: var(--color-5);
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 0.2em solid var(--color-3);
-  padding: 0.5em 1em;
-  cursor: pointer;
-
-  box-shadow: var(--mx-blur-shadow);
-  background: var(--mx-blur-bg);
-  backdrop-filter: var(--mx-blur-filter);
-}
-.mx-btn::before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 10%;
-  background: var(--color-0);
-  height: 0.3em;
-  right: 20%;
-  top: -0.21em;
-  transform: skewX(-45deg);
-  -webkit-transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
-  transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
-}
-.mx-btn::after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 10%;
-  background: var(--color-0);
-  height: 0.3em;
-  left: 20%;
-  bottom: -0.25em;
-  transform: skewX(45deg);
-  -webkit-transition: all 0.45 cubic-bezier(0.86, 0, 0.07, 1);
-  transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
-}
-.mx-btn:hover::before {
-  right: 80%;
-}
-.mx-btn:hover::after {
-  left: 80%;
 }

@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 
+import { SecureComponent } from "../components/built/context";
 import SiteNavbar from "../components/built/site_navbar";
 import { Navbar, NavGroup } from "../components/navbar";
 import Modal from "../components/modal";
@@ -124,7 +125,7 @@ export default function Downloads({ tree }) {
     }
 
     return (
-        <div className="page-container">
+        <SecureComponent>
             <SiteNavbar />
             <div className="page-wrapper">
                 <Navbar>
@@ -193,7 +194,7 @@ export default function Downloads({ tree }) {
                     </ul>
                 </div>
             </div>
-        </div>
+        </SecureComponent>
     )
 }
 

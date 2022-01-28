@@ -1,0 +1,64 @@
+.mx_button {
+    position: relative;
+    color: var(--color-5);
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 0.2em solid var(--color-3);
+    padding: 0.5em 1em;
+    cursor: pointer;
+  
+    box-shadow: var(--mx-blur-shadow);
+    background: var(--mx-blur-bg);
+    backdrop-filter: var(--mx-blur-filter);
+  }
+.mx_button::before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 10%;
+    background: var(--color-0);
+    height: 0.3em;
+    right: 20%;
+    top: -0.21em;
+    transform: skewX(-45deg);
+    -webkit-transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+    transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+}
+.mx_button::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 10%;
+    background: var(--color-0);
+    height: 0.3em;
+    left: 20%;
+    bottom: -0.25em;
+    transform: skewX(45deg);
+    -webkit-transition: all 0.45 cubic-bezier(0.86, 0, 0.07, 1);
+    transition: all 0.45s cubic-bezier(0.86, 0, 0.07, 1);
+}
+.mx_button:hover::before {
+    right: 80%;
+}
+.mx_button:hover::after {
+    left: 80%;
+}
+
+/* Glass Button */
+
+.mx_glass_button {
+    height: 100%;
+    padding: 10px 15px;
+
+    color: var(--color-5);
+    border: 1px solid var(--color-0);
+    box-shadow: var(--mx-blur-shadow);
+    background: var(--mx-blur-bg);
+    backdrop-filter: var(--mx-blur-filter);
+
+    cursor: pointer;
+}
+.mx_glass_button:hover {
+    background: var(--color-0);
+    color: var(--color-3);
+}
