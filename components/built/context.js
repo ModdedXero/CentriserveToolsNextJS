@@ -26,10 +26,10 @@ export function AuthProvider({ children }) {
         if (result.status === 200) {
             setToken(result.data);
             return 200;
-        } else if (result.status === 400)
-            return 400;
+        } else if (result.status === 204)
+            return 204;
         else 
-            return 401
+            return 201
     }
     
     async function Logout() {
@@ -47,8 +47,8 @@ export function AuthProvider({ children }) {
 
         const result = await axios.post("/api/auth/validate", 
         { email: tokenString.email, hash: tokenString.hash });
-        
-        if (result.status === 400) return Router.push("/login");
+
+        if (result.status === 204) return Router.push("/login");
         else {
             setToken(tokenString);
             return true;

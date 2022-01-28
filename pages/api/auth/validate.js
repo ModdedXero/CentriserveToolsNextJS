@@ -10,6 +10,6 @@ export default async function handler(req, res) {
 
     const result = await ValidateHash(email, hash);
 
-    if (!result) res.status(400).send("User not validated");
+    if (!result) res.status(204).send("User not validated");
     else res.status(200).send("User validated");
 }

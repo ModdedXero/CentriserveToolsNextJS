@@ -145,7 +145,6 @@ a:hover {
   
   font-size: 1.3rem;
   color: white;
-  padding: 7px 0;
   background: transparent;
 
   transition: all 0.25s;
@@ -169,8 +168,6 @@ a:hover {
   color: var(--color-5);
 }
 .mx-input:focus {
-  padding-bottom: 6px;  
-
   border-width: 3px;
   border-image: linear-gradient(to right, var(--color-2), var(--color-3));
   border-image-slice: 1;

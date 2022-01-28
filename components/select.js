@@ -20,7 +20,7 @@ export default function Select({ options=[], search=false, onChange, defaultValu
         }
 
         setFilteredOptions(opt);
-    }, []);
+    }, [options]);
 
     function OnQueryChange(e) {
         setQuery(e.target.value);
