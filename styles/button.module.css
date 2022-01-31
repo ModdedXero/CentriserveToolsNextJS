@@ -46,8 +46,8 @@
 
 /* Glass Button */
 
-.mx_glass_button {
-    height: 100%;
+.mx_glass_button,
+.mx_glass_button_selected {
     padding: 10px 15px;
 
     color: var(--color-5);
@@ -58,7 +58,12 @@
 
     cursor: pointer;
 }
-.mx_glass_button:hover {
+.mx_glass_button:hover,
+.mx_glass_button_selected {
     background: var(--color-0);
     color: var(--color-3);
+}
+
+.mx_glass_button_selected {
+    background: var(--color-0);
 }

@@ -6,8 +6,10 @@ export default function Button({ children, ...props }) {
     )
 }
 
-export function GlassButton({ children, thick=false, ...props }) {
+export function GlassButton({ children, thick=false, selected=false, ...props }) {
     return (
-        <button className={styles.mx_glass_button} style={{ padding: thick ? "20px" : null}} {...props}>{children}</button>
+        <button className={selected ? styles.mx_glass_button_selected : styles.mx_glass_button} style={{ padding: thick ? "20px" : null}} {...props}>
+            {children}
+        </button>
     )
 }

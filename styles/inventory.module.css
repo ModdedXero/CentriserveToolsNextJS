@@ -47,7 +47,6 @@
 .mx_inventory_body_admin_cat {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 
     height: 100%;
     width: 250px;
@@ -57,10 +56,19 @@
     backdrop-filter: var(--mx-blur-filter);
 }
 
+.mx_inventory_body_admin_cat_list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    overflow-y: auto;
+}
+
 .mx_inventory_body_admin_cat_btn {
     display: grid;
     grid-template-columns: 50% 50%;
     width: 100%;
+    margin-top: auto;
 }
 
 .mx_inventory_body_admin_cat_body {
@@ -98,4 +106,8 @@
 
 .mx_inventory_body_admin_cat_body_body {
     padding: 20px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
