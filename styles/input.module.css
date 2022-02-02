@@ -61,3 +61,11 @@
         transform: scale(1);
    }
 }
+
+.mx_textarea {
+    height: 150px;
+    resize: none;
+    overflow-y: auto;
+    color: var(--color-0);
+    font-size: 1.1rem;
+}

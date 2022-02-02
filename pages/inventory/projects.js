@@ -10,9 +10,6 @@ export default function InventoryPage() {
             <div className={styles.mx_inventory_wrapper}>
                 <InventoryNavbar />
                 <div className={styles.mx_inventory_page}>
-                    <div className={styles.mx_inventory_input}>
-                        
-                    </div>
                     Projects
                 </div>
             </div>

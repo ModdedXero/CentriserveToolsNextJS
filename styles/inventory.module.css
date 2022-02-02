@@ -22,6 +22,39 @@
     gap: 20px;
 }
 
+.mx_inventory_page_body {
+    display: flex;
+    width: 100%;
+    height: 90%;
+    margin-top: 10px;
+    gap: 20px;
+}
+
+.mx_inventory_page_body_cats {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 20%;
+
+    box-shadow: var(--mx-blur-shadow);
+    background: var(--mx-blur-bg);
+    backdrop-filter: var(--mx-blur-filter);
+}
+
+.mx_inventory_page_body_cats button {
+    height: 50px;
+    box-shadow: none;
+}
+
+.mx_inventory_page_body_container {
+    width: 100%;
+    height: 100%;
+
+    box-shadow: var(--mx-blur-shadow);
+    background: var(--mx-blur-bg);
+    backdrop-filter: var(--mx-blur-filter);
+}
+
 .mx_inventory_input {
     display: flex;
     width: 250px;
@@ -37,6 +70,12 @@
 .mx_inventory_input p {
     margin: 0 auto;
 }
+
+.mx_inventory_input button {
+    margin: auto 0;
+}
+
+/* Admin Inventory */
 
 .mx_inventory_body_admin {
     display: flex;
@@ -110,4 +149,25 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.mx_inventory_body_admin_cat_body_body h2 {
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+.mx_inventory_body_admin_cat_body_body_fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mx_inventory_body_admin_cat_body_body_fields_item {
+    display: grid;
+    grid-template-columns: 50% 25% 25%;
+    gap: 10px;
+}
+
+.mx_inventory_body_admin_cat_body_body_fields_item button {
+    margin-top: auto;
 }

@@ -13,3 +13,11 @@ export function GlassButton({ children, thick=false, selected=false, ...props })
         </button>
     )
 }
+
+export function SimpleButton({ children, ...props }) {
+    return (
+        <button className={styles.mx_simple_button} {...props}>
+            {children}
+        </button>
+    )
+}

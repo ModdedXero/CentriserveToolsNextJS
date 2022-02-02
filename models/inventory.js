@@ -4,7 +4,16 @@ const Schema = mongoose.Schema;
 
 const customFieldSchema = new Schema({
     name: String,
-    value: String
+    value: String,
+    type: String
+})
+
+const subItemSchema = new Schema({
+    price: Number,
+    value: Number,
+    serial: String,
+    customFields: [customFieldSchema],
+    notes: [String]
 })
 
 const itemSchema = new Schema({
@@ -15,9 +24,11 @@ const itemSchema = new Schema({
     price: Number,
     value: Number,
     amount: Number,
-    minLevel: Number,
-    ticket: String,
-    notes: [String]
+    minAmount: Number,
+    serial: String,
+    customFields: [customFieldSchema],
+    notes: [String],
+    subItems: [subItemSchema]
 })
 
 const historySchema = new Schema({
@@ -34,6 +45,7 @@ const categorySchema = new Schema({
     },
     unique: Boolean,
     items: [itemSchema],
+    itemNames: [String],
     customFields: [customFieldSchema],
     history: [historySchema]
 })

@@ -25,3 +25,9 @@
     flex-direction: column;
     gap: 15px;
 }
+
+.mx_form_group_horizontal {
+    display: grid;
+    grid-template-columns: 50% calc(50% - 10px);
+    gap: 10px;
+}

@@ -49,6 +49,7 @@
 .mx_glass_button,
 .mx_glass_button_selected {
     padding: 10px 15px;
+    height: fit-content;
 
     color: var(--color-5);
     border: 1px solid var(--color-0);
@@ -66,4 +67,26 @@
 
 .mx_glass_button_selected {
     background: var(--color-0);
+}
+
+/* Simple Button */
+
+.mx_simple_button {
+    height: fit-content;
+    padding: 5px;
+
+    color: var(--color-5);
+    outline: 0;
+    border: 1px solid var(--color-3);
+    background: transparent;
+
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+}
+
+.mx_simple_button:hover {
+    color: var(--color-3);
+
+    border-image: linear-gradient(to right, var(--color-2), var(--color-3));
+    border-image-slice: 1;
 }

@@ -8,7 +8,8 @@ import InventoryNavbar from "../../components/built/inventory_navbar";
 import Select from "../../components/select";
 import Modal from "../../components/modal";
 import { Form, FormGroup } from "../../components/form";
-import { GlassButton } from "../../components/button";
+import { GlassButton, SimpleButton } from "../../components/button";
+import List from "../../components/list";
 import styles from "../../styles/inventory.module.css";
 
 export default function InventoryPage({ locations = [], categories = [] }) {
@@ -34,7 +35,8 @@ export default function InventoryPage({ locations = [], categories = [] }) {
     const createCatRef = useRef();
     const catNameRef = useRef();
     const catUniqueRef = useRef();
-    const catFieldsRef = useRef();
+    const catItemNamesRef = useRef([]);
+    const catFieldsRef = useRef([]);
 
     async function CreateLocation(e) {
         e.preventDefault();
@@ -83,6 +85,37 @@ export default function InventoryPage({ locations = [], categories = [] }) {
         setCreateCatModal(false);
     }
 
+    async function UpdateCategory() {
+        const catCopy = {...currentCat};
+
+        catCopy.name = catNameRef.current.value;
+        catCopy.unique = catUniqueRef.current.checked;
+        console.log(catItemNamesRef.current)
+        catCopy.itemNames = catItemNamesRef.current;
+        catCopy.customFields = [];
+
+        for (let i = 0; i < catFieldsRef.current.length / 2; i++) {
+            const mI = i*2;
+
+            if (!catFieldsRef.current[mI]) continue;
+            if (!catFieldsRef.current[mI].value) continue;
+            if (catCopy.customFields.filter(i => i.name === catFieldsRef.current[mI].value).length) continue;
+
+            catCopy.customFields.push({
+                name: catFieldsRef.current[mI].value,
+                value: "",
+                type: catFieldsRef.current[mI + 1]
+            })
+        }
+
+        const result = await axios.post("/api/inventory/categories/update", { oldCat: currentCat, newCat: catCopy });
+        if (result.status === 200) {
+            const cats = await axios.get("/api/inventory/categories");
+            setAllCategories(cats.data);
+            setCurrentCat(catCopy);
+        }
+    }
+
     async function DeleteCategory(e) {
         e.preventDefault();
 
@@ -95,6 +128,12 @@ export default function InventoryPage({ locations = [], categories = [] }) {
         setDeleteCatModal(false);
     }
 
+    function addCustomField() {
+        const catCopy = {...currentCat};
+        catCopy.customFields.push({ name: "", type: "" });
+        setCurrentCat(catCopy);
+    }
+
     return (
         <SecureComponent>
             <SiteNavbar />
@@ -104,6 +143,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
                     <div className={styles.mx_inventory_header}>
                         <div className={styles.mx_inventory_input}>
                             <Select
+                                strict
                                 key={allLocations.length + selectedLocRef.current}
                                 options={allLocations}
                                 onChange={i => selectedLocRef.current = i.value}
@@ -207,21 +247,72 @@ export default function InventoryPage({ locations = [], categories = [] }) {
                         <div className={styles.mx_inventory_body_admin_cat_body}>
                             <div className={styles.mx_inventory_body_admin_cat_body_head}>
                                 <p>Category Settings</p>
-                                <GlassButton>Commit Changes</GlassButton>
+                                <GlassButton onClick={UpdateCategory}>Commit Changes</GlassButton>
                             </div>
                         {currentCat && 
                             <div className={styles.mx_inventory_body_admin_cat_body_body}>
                                 <Input
+                                    simple
                                     key={currentCat.name}
                                     placeholder="Category Name" 
                                     defaultValue={currentCat.name || null}
+                                    ref={catNameRef}
                                 />
                                 <Checkbox
                                     key={currentCat.unique + currentCat.name}
                                     placeholder="Category Items Unique?" 
                                     defaultChecked={currentCat.unique || false}
+                                    ref={catUniqueRef}
                                 />
-                                <h2>Custom Fields</h2>
+                                <List
+                                    key={currentCat.name + " list"}
+                                    label="Item Names"
+                                    options={currentCat.itemNames}
+                                    refs={catItemNamesRef}
+                                />
+                                <h2>Custom Fields <SimpleButton onClick={addCustomField}>Add</SimpleButton></h2>
+                                <div className={styles.mx_inventory_body_admin_cat_body_body_fields}>
+                                    {
+                                        currentCat.customFields.map((field, index) => {
+                                            if (index === 0) {
+                                                catFieldsRef.current = [];
+                                            }
+
+                                            const mIndex = index * 2;
+                                            return (
+                                                <div 
+                                                    key={mIndex + index} 
+                                                    className={styles.mx_inventory_body_admin_cat_body_body_fields_item}
+                                                >
+                                                    <Input
+                                                        key={field.name + index}
+                                                        simple
+                                                        placeholder="Field Name"
+                                                        defaultValue={field.name}
+                                                        ref={el => {
+                                                            catFieldsRef.current[mIndex] = el; 
+                                                            catFieldsRef.current[mIndex + 1] = field.type || catFieldsRef.current[mIndex + 1] || "Text";
+                                                        }}
+                                                    />
+                                                    <Select
+                                                        key={field.type}
+                                                        strict
+                                                        options={[ "Text", "Number" ]}
+                                                        defaultValue={"Text"}
+                                                        onChange={i => catFieldsRef.current[mIndex + 1] = i.value}
+                                                    />
+                                                    <SimpleButton onClick={_ => {
+                                                        const catCopy = {...currentCat};
+                                                        catCopy.customFields.splice(index, 1);
+                                                        console.log(catFieldsRef.current)
+                                                        catFieldsRef.current = [];
+                                                        setCurrentCat(catCopy);
+                                                    }}>Remove</SimpleButton>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
                             </div>}
                         </div>
                     </div>

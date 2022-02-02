@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 
 import styles from "../styles/select.module.css"
 
-export default function Select({ options=[], search=false, onChange, defaultValue, width }) {
+export default function Select({ options=[], search=false, strict=false, onChange, defaultValue, width }) {
     const [query, setQuery] = useState("");
-    const [current, setCurrent] = useState(defaultValue || "Select");
+    const [current, setCurrent] = useState(defaultValue || (search ? "Search" : "Select"));
 
     const [filteredOptions, setFilteredOptions] = useState([]);
 
@@ -28,7 +28,7 @@ export default function Select({ options=[], search=false, onChange, defaultValu
 
     function SelectItem(item) {
         if (search) {
-            setCurrent("Select");
+            setCurrent("Search");
         } else {
             setQuery("");
             setCurrent(item.label);
@@ -41,7 +41,8 @@ export default function Select({ options=[], search=false, onChange, defaultValu
     return (
         <div className={styles.mx_select} style={{ width: width }}>
             <div className="mx-input-group">
-                <input 
+                <input
+                    disabled={strict}
                     className="mx-input" 
                     ref={searchInputRef} 
                     placeholder={current} 

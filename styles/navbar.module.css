@@ -104,6 +104,10 @@
     gap: 50px;
 }
 
+.mx_navbar_container_vertical button {
+    box-shadow: none;
+}
+
 .mx_navbar_container_vertical .mx_navbar_group,
 .mx_navbar_container_vertical .mx_navbar_group_final {
     display: flex;

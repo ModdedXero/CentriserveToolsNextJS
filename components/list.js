@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 
 import { Input } from "./input";
-import { GlassButton } from "./button";
+import { GlassButton, SimpleButton } from "./button";
 import styles from "../styles/list.module.css";
 
-export default function List({ options = [], ref, label, unique=true, sorted=true, ...props }) {
+export default function List({ options = [], refs, label, unique=true, sorted=true, ...props }) {
     const [internalList, setInternalList] = useState(options || []);
     const [query, setQuery] = useState("");
     const inputRef = useRef();
@@ -18,7 +18,7 @@ export default function List({ options = [], ref, label, unique=true, sorted=tru
 
         internalList.push(inputRef.current.value);
         inputRef.current.value = "";
-        if (ref) ref.current = internalList;
+        if (refs) refs.current = internalList;
         setQuery("");
     }
 
@@ -26,14 +26,14 @@ export default function List({ options = [], ref, label, unique=true, sorted=tru
         const listCopy = [...internalList];
         listCopy.splice(index, 1);
         setInternalList(listCopy);
-        if (ref) ref.current = listCopy;
+        if (refs) refs.current = listCopy;
     }
 
     return (
         <div className={styles.mx_list} {...props}>
             <div className={styles.mx_list_head}>
                 <Input placeholder={label} ref={inputRef} onChange={OnQueryChange}/>
-                <GlassButton onClick={AddItem}>+</GlassButton>
+                <SimpleButton onClick={AddItem}>+</SimpleButton>
             </div>
             <div className={styles.mx_list_container}>
                 {
