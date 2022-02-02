@@ -47,12 +47,97 @@
 }
 
 .mx_inventory_page_body_container {
+    display: grid;
+    grid-template-columns: 32.5% 32.5% 32.5%;
+    gap: 1.25%;
+    padding: 10px;
+
     width: 100%;
     height: 100%;
+    overflow-y: auto;
 
     box-shadow: var(--mx-blur-shadow);
     background: var(--mx-blur-bg);
     backdrop-filter: var(--mx-blur-filter);
+}
+
+.mx_inventory_page_body_container_item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 130px;
+    padding: 5px 10px;
+
+    box-shadow: var(--mx-blur-shadow);
+    background: var(--mx-blur-bg);
+    backdrop-filter: var(--mx-blur-filter);
+}
+
+.mx_inventory_page_body_container_item h1 {
+    margin: 0;
+}
+
+.mx_inventory_page_body_container_item > div {
+    display: flex;
+    margin: 0;
+    margin-top: auto;
+}
+
+.mx_inventory_page_body_container_item h2 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.mx_inventory_page_body_container_item h3 {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+
+    margin: 0;
+}
+
+.mx_inventory_page_body_container_item .mx_icons {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    top: 10px;
+    right: 10px;
+    font-size: 1.1rem;
+}
+
+.mx_inventory_page_body_container_item .mx_icons i {
+    cursor: pointer;
+}
+
+.mx_inventory_page_body_container_item .mx_icons i:hover {
+    color: var(--color-3);
+}
+
+.mx_subitem_list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 250px;
+    overflow-y: auto;
+
+    border: 1px solid var(--color-3);
+}
+
+.mx_subitem_list > div {
+    position: relative;
+    padding: 10px;
+    border: 1px solid var(--color-3);
+}
+
+.mx_subitem_list p {
+    margin: 0;
+}
+
+.mx_subitem_list button {
+    position: absolute;
+    top: calc(50% - 37px / 2);
+    right: 5px;
 }
 
 .mx_inventory_input {

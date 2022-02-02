@@ -22,15 +22,30 @@ export default function InventoryPage({ locations }) {
     // Add Item
     const [addItemModal, setAddItemModal] = useState(false);
     const [itemCategory, setItemCategory] = useState();
+    const [addItemError, setAddItemError] = useState();
 
-    const itemNameRef = useRef();
+    const itemNameRef = useRef(0);
     const itemPriceRef = useRef();
     const itemValueRef = useRef();
     const itemAmountRef = useRef();
-    const itemMinLevelRef = useRef();
+    const itemMinAmountRef = useRef();
     const itemSerialRef = useRef();
-    const itemNotesRef = useRef();
     const itemFieldsRef = useRef([]);
+
+    // View/Edit Items
+    const [selectedItem, setSelectedItem] = useState();
+
+    const [viewItemModal, setViewItemModal] = useState(false);
+    const [viewUniqueItemModal, setViewUniqueItemModal] = useState(false);
+
+    // Checkout Item
+    const [checkoutItemModal, setCheckoutItemModal] = useState(false);
+    const [checkoutUniqueItemModal, setCheckoutUniqueItemModal] = useState(false);
+
+    const [checkoutUniqueList, setCheckoutUniqueList] = useState([]);
+    const [checkoutFinalList, setCheckoutFinalList] = useState([]);
+
+    const checkoutAmountRef = useRef();
 
     async function SelectLocation(loc) {
         const result = await axios.post("/api/inventory/client/location", { location: loc });
@@ -47,7 +62,77 @@ export default function InventoryPage({ locations }) {
     async function SubmitAddItem(e) {
         e.preventDefault();
 
+        const newItem = {
+            name: itemNameRef.current.value || itemNameRef.current,
+            price: parseFloat(itemPriceRef.current.value),
+            value: parseFloat(itemValueRef.current.value),
+            amount: itemAmountRef.current ? parseInt(itemAmountRef.current.value) || 1 : 1,
+            minAmount: itemMinAmountRef.current ? parseInt(itemMinAmountRef.current.value) || 0 : 0,
+            serial: itemSerialRef.current ? itemSerialRef.current.value || "" : "",
+            customFields: []
+        }
 
+        if (itemCategory.customFields.length > 0) {
+            for (let i = 0; i < itemFieldsRef.current.length / 2; i++) {
+                const mIndex = i * 2;
+                newItem.customFields.push({
+                    name: itemFieldsRef.current[mIndex + 1],
+                    value: itemFieldsRef.current[mIndex].value || ""
+                });
+            }
+        }
+
+        let error;
+
+        for (const [key, value] of Object.entries(newItem)) {
+            if (key === "name" ||
+            key === "price" || key === "value") {
+                if (!value) {
+                    error = "Failed to set required values! Please fill out the item!";
+                    break;
+                }
+            }
+
+            if (itemCategory.unique && key === "serial") {
+                if (!value) {
+                    error = "Failed to set required values! Please fill out the item!";
+                    break;
+                }
+            }
+        }
+
+        // TODO: Add error for input
+        if (error) {
+            setAddItemError(error);
+            return;
+        };
+
+        const result = await axios.post("/api/inventory/client/item/create", { 
+            item: newItem,
+            location: selectedLocation.name,
+            category: itemCategory.name
+        });
+
+        if (result.status === 200) {
+            setSelectedCategory(undefined);
+            await SelectLocation(selectedLocation.name);
+        }
+        
+        setAddItemModal(false);
+    }
+
+    async function SubmitAddToCheckout(e) {
+        e.preventDefault();
+    }
+
+    function updateCheckoutUniqueList(items) {
+        const retList = [];
+
+        for (const item of items) {
+            retList.push(item.serial);
+        }
+
+        setCheckoutUniqueList(retList);
     }
 
     return (
@@ -88,6 +173,8 @@ export default function InventoryPage({ locations }) {
                                                     min={0}
                                                     step="0.01"
                                                     defaultValue={0.00}
+                                                    ref={itemPriceRef}
+                                                    required
                                                 />
                                                 <Input
                                                     simple
@@ -96,31 +183,42 @@ export default function InventoryPage({ locations }) {
                                                     min={0}
                                                     step="0.01"
                                                     defaultValue={0.00}
+                                                    ref={itemValueRef}
+                                                    required
                                                 />
                                             </FormGroup>
                                         </FormGroup>
                                         <FormGroup horitontal>
                                             {(itemCategory &&
-                                            !itemCategory.itemNames.length) &&
+                                            itemCategory.itemNames.length === 0) &&
                                             <Input
                                                 simple
                                                 placeholder="Name"
+                                                ref={itemNameRef}
+                                                required
                                             />}
                                             {(itemCategory &&
-                                            itemCategory.itemNames.length) &&
+                                            itemCategory.itemNames.length > 0) &&
                                             <Select
                                                 options={itemCategory.itemNames}
                                                 placeholder="Name"
+                                                onChange={i => itemNameRef.current = i.value}
                                             />}
                                             <FormGroup horitontal>
+                                                {(itemCategory&&
+                                                !itemCategory.unique) &&
                                                 <Input
                                                     simple
                                                     placeholder="Amount"
                                                     type="number"
-                                                    min={0}
+                                                    min={1}
                                                     step="1"
-                                                    defaultValue={0}
-                                                />
+                                                    defaultValue={1}
+                                                    ref={itemAmountRef}
+                                                    required
+                                                />}
+                                                {(itemCategory&&
+                                                !itemCategory.unique) &&
                                                 <Input
                                                     simple
                                                     placeholder="Min Amount"
@@ -128,16 +226,25 @@ export default function InventoryPage({ locations }) {
                                                     min={0}
                                                     step="1"
                                                     defaultValue={0}
-                                                />
+                                                    ref={itemMinAmountRef}
+                                                    required
+                                                />}
                                             </FormGroup>
                                         </FormGroup>
+                                        {(itemCategory&&
+                                        itemCategory.unique) &&
                                         <Input
                                             simple
                                             placeholder="Serial Number"
-                                        />
+                                            ref={itemSerialRef}
+                                            required
+                                        />}
                                         {
                                             itemCategory &&
                                             itemCategory.customFields.map((field, index) => {
+                                                const mIndex = index * 2;
+
+                                                itemFieldsRef.current[mIndex + 1] = field.name;
                                                 return (
                                                     <Input
                                                         simple
@@ -146,13 +253,12 @@ export default function InventoryPage({ locations }) {
                                                         type={field.type === "Number" ? "number" : "text"}
                                                         step="0.01"
                                                         min={0}
+                                                        ref={el => itemFieldsRef.current[mIndex] = el}
+                                                        required
                                                     />
                                                 )
                                             })
                                         }
-                                        <TextArea
-                                            label="Notes"
-                                        />
                                     </FormGroup>
                                     <FormGroup final>
                                         <Button>
@@ -185,12 +291,250 @@ export default function InventoryPage({ locations }) {
                                 selectedCategory &&
                                 selectedCategory.items.map((item, index) => {
                                     return (
-                                        <div>
-                                            {item.name}
+                                        <div className={styles.mx_inventory_page_body_container_item} key={index + "item"}>
+                                            <h1>{item.name}</h1>
+                                            <div>
+                                                <h2>{item.amount} units | ${item.value} | Total: ${item.amount * item.value}</h2>
+                                            </div>
+                                            {item.minAmount > 0 && <h3>Min Amount: {item.minAmount}</h3>}
+                                            <div className={styles.mx_icons}>
+                                                <i className="fas fa-history"/>
+                                                <i 
+                                                    onClick={_ => { 
+                                                        selectedCategory.unique ? setViewUniqueItemModal(true) : setViewItemModal(true); 
+                                                        setSelectedItem(item);
+                                                    }} 
+                                                    className="fas fa-boxes"
+                                                />
+                                                <i 
+                                                    onClick={_ => {
+                                                        selectedCategory.unique ? setCheckoutUniqueItemModal(true) : setCheckoutItemModal(true);
+                                                        setSelectedItem(item);
+                                                        updateCheckoutUniqueList(item.subItems);
+                                                    }}
+                                                    className="fas fa-shopping-cart"
+                                                />
+                                            </div>
                                         </div>
                                     )
                                 })
                             }
+                            <Modal open={viewItemModal} onClose={setViewItemModal}>
+                                {selectedItem &&
+                                <Form width="600px" onSubmit={SubmitAddItem}>
+                                    <FormGroup>
+                                        <Input
+                                                simple
+                                                placeholder="Name"
+                                                defaultValue={selectedItem.name}
+                                                disabled
+                                        />
+                                        <FormGroup horitontal>
+                                            <FormGroup horitontal>
+                                                <Input
+                                                    simple
+                                                    placeholder="Price"
+                                                    defaultValue={selectedItem.price}
+                                                    disabled
+                                                />
+                                                <Input
+                                                    simple
+                                                    placeholder="Value"
+                                                    defaultValue={selectedItem.value}
+                                                    disabled
+                                                />
+                                            </FormGroup>
+                                            <FormGroup horitontal>
+                                                {!selectedCategory.unique &&
+                                                <Input
+                                                    simple
+                                                    placeholder="Amount"
+                                                    defaultValue={selectedItem.amount}
+                                                    disabled
+                                                />}
+                                                {!selectedCategory.unique &&
+                                                <Input
+                                                    simple
+                                                    placeholder="Min Amount"
+                                                    defaultValue={selectedItem.minAmount}
+                                                    disabled
+                                                />}
+                                            </FormGroup>
+                                        </FormGroup>
+                                        {selectedCategory.unique &&
+                                        <Input
+                                            simple
+                                            placeholder="Serial Number"
+                                            disabled
+                                        />}
+                                        {
+                                            selectedItem.customFields.map((field, index) => {
+                                                return (
+                                                    <Input
+                                                        key={index + "field"}
+                                                        simple
+                                                        disabled
+                                                        placeholder={field.name}
+                                                        defaultValue={field.value}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </FormGroup>
+                                </Form>}
+                            </Modal>
+                            <Modal open={viewUniqueItemModal} onClose={setViewUniqueItemModal}>
+                                {selectedItem &&
+                                <Form width="600px" onSubmit={SubmitAddItem}>
+                                    <FormGroup>
+                                        <Input
+                                                simple
+                                                placeholder="Name"
+                                                defaultValue={selectedItem.name}
+                                                disabled
+                                        />
+                                        <FormGroup horitontal>
+                                            <FormGroup horitontal>
+                                                <Input
+                                                    simple
+                                                    placeholder="Price"
+                                                    defaultValue={selectedItem.price}
+                                                    disabled
+                                                />
+                                                <Input
+                                                    simple
+                                                    placeholder="Value"
+                                                    defaultValue={selectedItem.value}
+                                                    disabled
+                                                />
+                                            </FormGroup>
+                                            <FormGroup horitontal>
+                                                <Input
+                                                    simple
+                                                    placeholder="Amount"
+                                                    defaultValue={selectedItem.amount}
+                                                    disabled
+                                                />
+                                                {!selectedCategory.unique &&
+                                                <Input
+                                                    simple
+                                                    placeholder="Min Amount"
+                                                    defaultValue={selectedItem.minAmount}
+                                                    disabled
+                                                />}
+                                            </FormGroup>
+                                        </FormGroup>
+                                        <div className={styles.mx_subitem_list}>
+                                        {
+                                            selectedItem.subItems.map((subItem, index) => {
+                                                return (
+                                                    <div key={index + "subItem"}>
+                                                        <p>Serial Number: {subItem.serial}</p>
+                                                        {
+                                                            subItem.customFields.map((field, index1) => {
+                                                                return (
+                                                                    <p key={index1 + "subField"}>{field.name}: {field.value}</p>
+                                                                )
+                                                            })
+                                                        }
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                        </div>
+                                    </FormGroup>
+                                </Form>}
+                            </Modal>
+                            <Modal open={checkoutItemModal} onClose={setCheckoutItemModal}>
+                                {selectedItem &&
+                                <Form onSubmit={SubmitAddToCheckout}>
+                                    <FormGroup>
+                                        <h1>{selectedItem.name}</h1>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <h3>Available: {selectedItem.amount}</h3>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Input
+                                            simple
+                                            placeholder="Amount to Checkout"
+                                            defaultValue={0}
+                                            type="number"
+                                            min={0}
+                                            max={selectedItem.amount}
+                                            step="1"
+                                            ref={checkoutAmountRef}
+                                            required
+                                        />
+                                    </FormGroup>
+                                    <FormGroup final>
+                                        <Button>Add to Checkout</Button>
+                                    </FormGroup>
+                                </Form>}
+                            </Modal>
+                            <Modal open={checkoutUniqueItemModal} onClose={setCheckoutUniqueItemModal}>
+                                <Form width="400px" onSubmit={SubmitAddToCheckout}>
+                                    <FormGroup>Available List</FormGroup>
+                                    <FormGroup>
+                                        <div className={styles.mx_subitem_list}>
+                                        {
+                                            selectedItem &&
+                                            selectedItem.subItems.map((subItem, index) => {
+                                                return (
+                                                    <div key={index + "subItem"}>
+                                                        <p>Serial Number: {subItem.serial}</p>
+                                                        {
+                                                            subItem.customFields.map((field, index1) => {
+                                                                return (
+                                                                    <p key={index1 + "subField"}>{field.name}: {field.value}</p>
+                                                                )
+                                                            })
+                                                        }
+                                                        <GlassButton type="button" onClick={_ => {
+                                                            selectedItem.subItems.splice(index, 1);
+                                                            const copy = [...checkoutFinalList];
+                                                            copy.push(subItem);
+                                                            setCheckoutFinalList(copy);
+                                                        }}>Add</GlassButton>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>Checkout List</FormGroup>
+                                    <FormGroup>
+                                        <div className={styles.mx_subitem_list}>
+                                        {
+                                            checkoutFinalList &&
+                                            checkoutFinalList.map((subItem, index) => {
+                                                return (
+                                                    <div key={index + "subItem"}>
+                                                        <p>Serial Number: {subItem.serial}</p>
+                                                        {
+                                                            subItem.customFields.map((field, index1) => {
+                                                                return (
+                                                                    <p key={index1 + "subField"}>{field.name}: {field.value}</p>
+                                                                )
+                                                            })
+                                                        }
+                                                        <GlassButton type="button" onClick={_ => {
+                                                            checkoutFinalList.splice(index, 1);
+                                                            const copy = {...selectedItem};
+                                                            copy.subItems.push(subItem);
+                                                            setSelectedItem(copy);
+                                                        }}>Remove</GlassButton>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup final>
+                                        <Button type="submit">Add to Checkout</Button>
+                                    </FormGroup>
+                                </Form>
+                            </Modal>
                         </div>
                     </div>
                 </div>

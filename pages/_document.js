@@ -9,7 +9,9 @@ class MainDocument extends Document {
   render() {
     return (
       <Html>
-        <Head />
+        <Head>
+          <script src="https://kit.fontawesome.com/4280a60692.js" crossorigin="anonymous"></script>
+        </Head>
         <body>
           <Main />
           <NextScript />

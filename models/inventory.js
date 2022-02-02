@@ -13,7 +13,6 @@ const subItemSchema = new Schema({
     value: Number,
     serial: String,
     customFields: [customFieldSchema],
-    notes: [String]
 })
 
 const itemSchema = new Schema({
@@ -27,7 +26,6 @@ const itemSchema = new Schema({
     minAmount: Number,
     serial: String,
     customFields: [customFieldSchema],
-    notes: [String],
     subItems: [subItemSchema]
 })
 

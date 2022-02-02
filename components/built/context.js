@@ -80,33 +80,23 @@ export function AuthProvider({ children }) {
     )
 }
 
-// export function SecureComponent({ children }) {
-//     const { currentUser } = useAuth();
-    
-//     if (!currentUser) {
-//         Router.push("/login");
-//         return;
-//     } else {
-//         <div className="page-container">
-//             {currentUser && children}
-//         </div>
-//     }
-// }
-
 export function SecureComponent({ children }) {
+    const [loading, setLoading] = useState();
     const { Validate } = useAuth();
 
     useEffect(() => {
         async function CheckValidate() {
             await Validate();
+            setLoading(false);
         }
 
+        setLoading(true);
         CheckValidate();
     }, [])
 
     return (
         <div className="page-container">
-            {children}
+            {!loading && children}
         </div>
     )
 }

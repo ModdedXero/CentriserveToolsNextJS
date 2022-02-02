@@ -90,7 +90,6 @@ export default function InventoryPage({ locations = [], categories = [] }) {
 
         catCopy.name = catNameRef.current.value;
         catCopy.unique = catUniqueRef.current.checked;
-        console.log(catItemNamesRef.current)
         catCopy.itemNames = catItemNamesRef.current;
         catCopy.customFields = [];
 
@@ -298,7 +297,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
                                                         key={field.type}
                                                         strict
                                                         options={[ "Text", "Number" ]}
-                                                        defaultValue={"Text"}
+                                                        defaultValue={field.type}
                                                         onChange={i => catFieldsRef.current[mIndex + 1] = i.value}
                                                     />
                                                     <SimpleButton onClick={_ => {
