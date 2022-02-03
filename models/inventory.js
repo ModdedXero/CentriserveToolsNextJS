@@ -9,8 +9,6 @@ const customFieldSchema = new Schema({
 })
 
 const subItemSchema = new Schema({
-    price: Number,
-    value: Number,
     serial: String,
     customFields: [customFieldSchema],
 })

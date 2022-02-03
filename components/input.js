@@ -36,7 +36,7 @@ export const Checkbox = forwardRef((props, ref) => {
 export const TextArea = forwardRef((props, ref) => {
     return (
         <div className="mx-input-group">
-            <label>{props.label}</label>
+            <label style={{ fontSize: "1.3rem" }}>{props.label}</label>
             <textarea className={styles.mx_textarea} ref={ref} {...props}/>
         </div>
     )

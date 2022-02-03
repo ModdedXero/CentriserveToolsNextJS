@@ -140,6 +140,19 @@
     right: 5px;
 }
 
+.mx_inventory_checkout_list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 200px;
+    font-size: 1.1rem;
+    overflow-y: auto;
+}
+
+.mx_inventory_checkout_list p {
+    margin: 0;
+}
+
 .mx_inventory_input {
     display: flex;
     width: 250px;

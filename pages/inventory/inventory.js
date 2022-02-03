@@ -10,6 +10,7 @@ import { GlassButton } from "../../components/button";
 import { Navbar, NavGroup } from "../../components/navbar";
 import { Form, FormGroup } from "../../components/form";
 import { Input, TextArea } from "../../components/input";
+import { Table, TableBCell, TableBody, TableHCell, TableHead, TableRow } from "../../components/table";
 import Modal from "../../components/modal";
 import Select from "../../components/select";
 
@@ -47,7 +48,14 @@ export default function InventoryPage({ locations }) {
 
     const checkoutAmountRef = useRef();
 
+    // Checkout View
+    const [checkoutViewModal, setCheckoutViewModal] = useState(false);
+    const [checkoutCart, setCheckoutCart] = useState([]);
+
     async function SelectLocation(loc) {
+        setSelectedCategory(undefined);
+        setCheckoutCart([]);
+
         const result = await axios.post("/api/inventory/client/location", { location: loc });
         if (result.status === 200) {
             setSelectedLocation(result.data);
@@ -122,6 +130,72 @@ export default function InventoryPage({ locations }) {
     }
 
     async function SubmitAddToCheckout(e) {
+        e.preventDefault();
+
+        const copy = [...checkoutCart];
+
+        const length =  checkoutCart.length || 1;
+        for (let i = 0; i < length; i++) {
+            console.log(i)
+            console.log(copy.filter(i => i.category === selectedCategory.name))
+            if (copy.filter(i => i.category === selectedCategory.name).length > 0) {
+                if (copy[i].category === selectedCategory.name) {
+                    if (selectedCategory.unique) {
+                        for (const item of checkoutFinalList) {
+                            copy[i].items.push({ name: selectedItem.name, ...item });
+                        }
+
+                        break;
+                    } else {
+                        if (copy[i].items.filter(i => i.name === selectedItem.name).length > 0) {
+                            for (const item of copy[i].items) {
+                                item.amount += parseInt(checkoutAmountRef.current.value);
+                                selectedItem.amount -= parseInt(checkoutAmountRef.current.value);
+                                break;
+                            }
+                        } else {
+                            const item = {...selectedItem};
+                            item.amount = parseInt(checkoutAmountRef.current.value);
+                            selectedItem.amount -= parseInt(checkoutAmountRef.current.value);
+
+                            copy[i].items.push(item);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                const items = [];
+
+                if (selectedCategory.unique) {
+                    for (const item of checkoutFinalList) {
+                        items.push({ name: selectedItem.name, ...item });
+                    }
+                } else {
+                    const item = {...selectedItem};
+                    item.amount = parseInt(checkoutAmountRef.current.value);
+                    selectedItem.amount -= parseInt(checkoutAmountRef.current.value);
+
+                    items.push(item);
+                }
+
+                copy.push({
+                    category: selectedCategory.name,
+                    items: items
+                })
+
+                break;
+            }
+        }
+        
+        if (checkoutAmountRef.current) checkoutAmountRef.current.value = 0;
+        setCheckoutUniqueItemModal(false);
+        setCheckoutItemModal(false);
+        setCheckoutFinalList([]);
+        setCheckoutCart(copy);
+        console.log(checkoutCart);
+    }
+
+    async function SubmitCheckout(e) {
         e.preventDefault();
     }
 
@@ -268,12 +342,72 @@ export default function InventoryPage({ locations }) {
                                 </Form>
                             </Modal>
                         </NavGroup>
+                        <NavGroup align="right">
+                            <Button onClick={_ => setCheckoutViewModal(true)}>View Checkout</Button>
+                            <Modal open={checkoutViewModal} onClose={setCheckoutViewModal}>
+                                <Form width="600px" onSubmit={SubmitCheckout}>
+                                    <div className={styles.mx_inventory_checkout_list}>
+                                        <Table>
+                                            <TableHead top="0px">
+                                                <TableHCell>Category</TableHCell>
+                                                <TableHCell>Item</TableHCell>
+                                                <TableHCell>Value</TableHCell>
+                                                <TableHCell>Serial/Amount</TableHCell>
+                                            </TableHead>
+                                            <TableBody>
+                                            {
+                                                checkoutCart.sort((a, b) => a.category.localeCompare(b.category)).map((item, index) => {
+                                                    return (
+                                                        <>
+                                                            {
+                                                                item.items.map((subItem, index1) => {
+                                                                    return (
+                                                                        <TableRow key={index1}>
+                                                                            <TableBCell>{item.category}</TableBCell>
+                                                                            <TableBCell>{subItem.name}</TableBCell>
+                                                                            <TableBCell>{subItem.value}</TableBCell>
+                                                                            <TableBCell>
+                                                                                {selectedLocation.categories.filter(
+                                                                                    i => i.name === item.category
+                                                                                )[0].unique ?
+                                                                                    subItem.serial :
+                                                                                    subItem.amount
+                                                                                }
+                                                                            </TableBCell>
+                                                                        </TableRow>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </>
+                                                    )
+                                                })
+                                            }
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                    <FormGroup>
+                                        <TextArea
+                                            label="Reason"
+                                            required
+                                        />
+                                        <Input
+                                            simple
+                                            placeholder="Ticket Number"
+                                            required
+                                        />
+                                    </FormGroup>
+                                    <FormGroup final>
+                                        <Button>Submit</Button>
+                                    </FormGroup>
+                                </Form>
+                            </Modal>
+                        </NavGroup>
                     </Navbar>
                     <div className={styles.mx_inventory_page_body}>
                         <div className={styles.mx_inventory_page_body_cats}>
                             {
                                 selectedLocation &&
-                                selectedLocation.categories.map((cat, index) => {
+                                selectedLocation.categories.sort((a, b) => a.name.localeCompare(b.name)).map((cat, index) => {
                                     return (
                                         <GlassButton 
                                             key={index}
@@ -424,6 +558,9 @@ export default function InventoryPage({ locations }) {
                                                 />}
                                             </FormGroup>
                                         </FormGroup>
+                                        <FormGroup>
+                                            <h3>Items:</h3>
+                                        </FormGroup>
                                         <div className={styles.mx_subitem_list}>
                                         {
                                             selectedItem.subItems.map((subItem, index) => {
@@ -458,9 +595,9 @@ export default function InventoryPage({ locations }) {
                                         <Input
                                             simple
                                             placeholder="Amount to Checkout"
-                                            defaultValue={0}
+                                            defaultValue={1}
                                             type="number"
-                                            min={0}
+                                            min={1}
                                             max={selectedItem.amount}
                                             step="1"
                                             ref={checkoutAmountRef}
@@ -474,7 +611,9 @@ export default function InventoryPage({ locations }) {
                             </Modal>
                             <Modal open={checkoutUniqueItemModal} onClose={setCheckoutUniqueItemModal}>
                                 <Form width="400px" onSubmit={SubmitAddToCheckout}>
-                                    <FormGroup>Available List</FormGroup>
+                                    <FormGroup>
+                                        <h3>Available List</h3>
+                                    </FormGroup>
                                     <FormGroup>
                                         <div className={styles.mx_subitem_list}>
                                         {
@@ -502,7 +641,9 @@ export default function InventoryPage({ locations }) {
                                         }
                                         </div>
                                     </FormGroup>
-                                    <FormGroup>Checkout List</FormGroup>
+                                    <FormGroup>
+                                        <h3>Checkout List</h3>
+                                    </FormGroup>
                                     <FormGroup>
                                         <div className={styles.mx_subitem_list}>
                                         {

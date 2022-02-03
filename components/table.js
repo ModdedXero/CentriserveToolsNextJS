@@ -12,12 +12,12 @@ export function Table({ children }) {
     )
 }
 
-export function TableHead({ children }) {
+export function TableHead({ children, top }) {
     const [sticky, setSticky] = useState();
     const headRef = useRef();
 
     useEffect(() => {
-        setSticky(headRef.current.getBoundingClientRect().top - 0.1);
+        setSticky(top || headRef.current.getBoundingClientRect().top - 0.1);
     }, [])
 
     return (
