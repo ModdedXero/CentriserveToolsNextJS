@@ -17,6 +17,9 @@ export default function InventoryPage({ locations = [], categories = [] }) {
     const [allCategories, setAllCategories] = useState(categories);
     const [currentCat, setCurrentCat] = useState();
 
+    // Alerts
+    const [successAlert, setSuccessAlert] = useState();
+
     // Location Modals
     const [createLocModal, setCreateLocModal] = useState();
     const [updateLocModal, setUpdateLocModal] = useState();
@@ -42,7 +45,10 @@ export default function InventoryPage({ locations = [], categories = [] }) {
         e.preventDefault();
 
         const result = await axios.post("/api/inventory/locations/create", { name: createLocRef.current.value });
-        if (result.status === 200) locations.push(createLocRef.current.value);
+        if (result.status === 200) {
+            locations.push(createLocRef.current.value);
+            setSuccessAlert(`Location ${createLocRef.current.value} deleted!`);
+        }
         createLocRef.current.value = "";
         setCreateLocModal(false);
     }
@@ -56,6 +62,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
             const locCopy = [...allLocations];
             locCopy[locCopy.findIndex(i => i === selectedLocRef.current)] = updateLocRef.current.value;
             setAllLocations(locCopy);
+            setSuccessAlert(`Location ${selectedLocRef.current} updated!`);
         }
         updateLocRef.current.value = "";
         setUpdateLocModal(false);
@@ -69,6 +76,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
             const locCopy = [...allLocations];
             locCopy.splice(locCopy.findIndex(i => i === selectedLocRef.current), 1);
             setAllLocations(locCopy);
+            setSuccessAlert(`Location ${selectedLocRef.current} deleted!`);
         }
         setDeleteLocModal(false);
     }
@@ -80,6 +88,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
         if (result.status === 200) {
             const cats = await axios.get("/api/inventory/categories");
             setAllCategories(cats.data);
+            setSuccessAlert(`Category ${createCatRef.current.value} created!`);
         }
         createCatRef.current.value = "";
         setCreateCatModal(false);
@@ -111,6 +120,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
         if (result.status === 200) {
             const cats = await axios.get("/api/inventory/categories");
             setAllCategories(cats.data);
+            setSuccessAlert(`Category ${currentCat.name} updated!`);
             setCurrentCat(catCopy);
         }
     }
@@ -122,6 +132,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
         if (result.status === 200) {
             const cats = await axios.get("/api/inventory/categories");
             setAllCategories(cats.data);
+            setSuccessAlert(`Category ${currentCat.name} deleted!`);
         }
         setCurrentCat(undefined);
         setDeleteCatModal(false);
@@ -136,6 +147,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
     return (
         <SecureComponent>
             <SiteNavbar />
+            <SuccessAlert data={successAlert} clearData={setSuccessAlert} />
             <div className={styles.mx_inventory_wrapper}>
                 <InventoryNavbar />
                 <div className={styles.mx_inventory_page}>
@@ -323,6 +335,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
 
 import { parseLocations } from "../api/inventory/locations";
 import { parseCategories } from "../api/inventory/categories";
+import { SuccessAlert } from "../../components/alert";
 
 export async function getStaticProps({ params }) {
     const locations = await parseLocations();

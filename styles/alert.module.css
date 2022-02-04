@@ -1,3 +1,63 @@
-.mx_alert {
-    
+.mx_alert,
+.mx_alert_hidden {
+    position: fixed;
+    top: 20px;
+    left: calc(50% - 150px);
+
+    display: grid;
+    grid-template-columns: 7% 85% 10%;
+    height: 60px;
+    max-height: 1000px;
+    width: 450px;
+    padding: 10px;
+
+    box-shadow: var(--mx-blur-shadow-clear) var(--mx-alert-success);
+    background: var(--mx-blur-bg);
+    backdrop-filter: var(--mx-blur-filter);
+
+    animation: shadowBlink 2s infinite;
+    transition: all 1s ease-in-out;
+}
+.mx_alert_hidden {
+    padding: 0 10px;
+    max-height: 0px;
+    overflow: hidden;
+}
+
+@keyframes shadowBlink {
+    0% {
+        box-shadow: none;
+    }
+    50% {
+        box-shadow: var(--mx-blur-shadow-clear) var(--mx-alert-success);
+    }
+    100% {
+        box-shadow: none;
+    }
+}
+
+.mx_alert i,
+.mx_alert strong {
+    margin: auto 0;
+}
+
+.mx_alert i {
+    color: var(--mx-alert-success);
+}
+
+.mx_alert button {
+    margin: auto;
+    padding: 0;
+    width: fit-content;
+    height: fit-content;
+
+    color: var(--mx-alert-success);
+    background-color: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.mx_alert button:hover {
+    color: var(--color-4);
 }

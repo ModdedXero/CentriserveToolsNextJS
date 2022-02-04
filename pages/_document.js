@@ -17,6 +17,7 @@ class MainDocument extends Document {
           <NextScript />
           {/*Below we add the modal wrapper*/}
           <div id="modalPortal"></div>
+          <div id="alertPortal"></div>
         </body>
       </Html>
     );

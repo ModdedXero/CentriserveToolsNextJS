@@ -27,6 +27,9 @@
 .mx_navbar_container .mx_navbar_group_final {
     margin-left: auto;
 }
+.mx_navbar_container .mx_navbar_group_final button {
+    height: 100%;
+}
 
 .mx_navbar_container .mx_navbar_dropdown {
     position: relative;

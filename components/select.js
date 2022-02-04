@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import styles from "../styles/select.module.css"
 
-export default function Select({ options=[], search=false, strict=false, onChange, defaultValue, width }) {
+export default function Select({ options=[], search=false, strict=false, getQuery, noShow=false, onChange, defaultValue, width }) {
     const [query, setQuery] = useState("");
     const [current, setCurrent] = useState(defaultValue || (search ? "Search" : "Select"));
 
@@ -24,6 +24,7 @@ export default function Select({ options=[], search=false, strict=false, onChang
 
     function OnQueryChange(e) {
         setQuery(e.target.value);
+        if (getQuery) getQuery(e.target.value);
     }
 
     function SelectItem(item) {
@@ -53,6 +54,7 @@ export default function Select({ options=[], search=false, strict=false, onChang
             </div>
             <div className={styles.mx_select_container}>
                 {
+                    !noShow &&
                     filteredOptions.sort((a, b) => a.label.localeCompare(b.label)).filter(item => {
                         if (!query || item.label.toLowerCase().includes(query.toLowerCase())) {
                             return item;

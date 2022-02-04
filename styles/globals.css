@@ -11,6 +11,8 @@
   --color-4: #94F3E4;
   --color-5: #E4E4E4;
 
+  --mx-alert-success: #46bd8b;
+
   --mx-blur-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.712);
   --mx-blur-shadow-clear: 0 0 0.5rem 0;
   --mx-blur-filter: saturate(180%) blur(10px);

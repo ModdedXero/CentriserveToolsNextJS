@@ -1,18 +1,31 @@
+import { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+
 import styles from "../styles/alert.module.css"
 
-export function Success() {
-    return (
-        <div className={styles.mx_alert_success}>
-            <button class="close" data-dismiss="alert">
-                <span aria-hidden="true">
-                    <a>
-                        <i class="fa fa-times greencross" />
-                    </a>
-                </span>
-                <span class="sr-only">Close</span>
-            </button>
-            <i class="start-icon far fa-check-circle faa-tada animated"></i>
-            <strong class="font__weight-semibold">Well done!</strong> You successfullyread this important.
-        </div>
+export function SuccessAlert({ data, clearData, lifetime=5 }) {
+    const [visible, setVisible] = useState(false);
+    const [firstRender, setFirstRender] = useState(true);
+
+    useEffect(() => {
+        if (!data) return;
+
+        setFirstRender(false);
+        setVisible(true);
+        setTimer(lifetime);
+    }, [data])
+
+    function setTimer(delay) {
+        setTimeout(() => { setVisible(false); }, delay * 1000);
+    }
+
+    if (firstRender) return null;
+    return  ReactDOM.createPortal(
+        <div className={visible ? styles.mx_alert : styles.mx_alert + " " + styles.mx_alert_hidden}>
+            <i className="far fa-check-circle" />
+            <strong>{data}</strong>
+            <button className="far fa-times-circle"></button>
+        </div>,
+        document.getElementById("alertPortal")
     )
 }

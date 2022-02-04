@@ -32,7 +32,7 @@ const historySchema = new Schema({
     ticket: String,
     items: [itemSchema],
     reason: String
-})
+}, { timestamps: true })
 
 const categorySchema = new Schema({
     name: {
