@@ -16,7 +16,7 @@ export function SuccessAlert({ data, clearData, lifetime=5 }) {
     }, [data])
 
     function setTimer(delay) {
-        setTimeout(() => { setVisible(false); }, delay * 1000);
+        setTimeout(() => { setVisible(false); clearData(null); }, delay * 1000);
     }
 
     if (firstRender) return null;
@@ -24,7 +24,7 @@ export function SuccessAlert({ data, clearData, lifetime=5 }) {
         <div className={visible ? styles.mx_alert : styles.mx_alert + " " + styles.mx_alert_hidden}>
             <i className="far fa-check-circle" />
             <strong>{data}</strong>
-            <button className="far fa-times-circle"></button>
+            <button className="far fa-times-circle" onClick={_ => setVisible(false)}></button>
         </div>,
         document.getElementById("alertPortal")
     )

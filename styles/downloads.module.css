@@ -1,0 +1,31 @@
+.mx_downloads_list {
+    list-style: none;
+    text-decoration: none;
+}
+
+.mx_downloads_list li {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.mx_downloads_list div {
+    display: flex;
+}
+
+.mx_downloads_list li i {
+    margin-top: auto;
+}
+
+.mx_downloads_list button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+
+    cursor: pointer;
+}
+
+.mx_downloads_list button i:hover {
+    color: var(--color-3);
+}

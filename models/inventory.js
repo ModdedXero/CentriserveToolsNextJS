@@ -8,11 +8,6 @@ const customFieldSchema = new Schema({
     type: String
 })
 
-const subItemSchema = new Schema({
-    serial: String,
-    customFields: [customFieldSchema],
-})
-
 const itemSchema = new Schema({
     name: {
         type: String,
@@ -24,13 +19,19 @@ const itemSchema = new Schema({
     minAmount: Number,
     serial: String,
     customFields: [customFieldSchema],
-    subItems: [subItemSchema]
+    subItems: [{
+        serial: String,
+        customFields: [customFieldSchema]
+    }]
 })
 
 const historySchema = new Schema({
     username: String,
     ticket: String,
-    items: [itemSchema],
+    items: [{
+        category: String,
+        items: [itemSchema]
+    }],
     reason: String
 }, { timestamps: true })
 
@@ -42,8 +43,7 @@ const categorySchema = new Schema({
     unique: Boolean,
     items: [itemSchema],
     itemNames: [String],
-    customFields: [customFieldSchema],
-    history: [historySchema]
+    customFields: [customFieldSchema]
 })
 
 // Model used for a message on home page
@@ -52,7 +52,8 @@ const inventorySchema = new Schema({
         type: String,
         required: true
     },
-    categories: [categorySchema]
+    categories: [categorySchema],
+    history: [historySchema]
 });
 
 module.exports = mongoose.models.Inventory || mongoose.model("Inventory", inventorySchema);

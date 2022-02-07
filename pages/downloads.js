@@ -8,11 +8,15 @@ import Select from "../components/select";
 import Button from "../components/button";
 import ProgressBar from "../components/progress_bar";
 
+import styles from "../styles/downloads.module.css";
+
 export default function Downloads({ tree }) {
     const [fileTree, setFileTree] = useState(tree);
     const [treePath, setTreePath] = useState([]);
     const [visibleTree, setVisibleTree] = useState(getDescendantProp(tree, treePath));
     const [searchOptions, setSearchOptions] = useState(getSearchOptions(tree));
+
+    const [copyToClipboardAlert, setCopyToClipboardAlert] = useState("");
 
     const [folderModal, setFolderModal] = useState(false);
     const [fileModal, setFileModal] = useState(false);
@@ -127,6 +131,7 @@ export default function Downloads({ tree }) {
     return (
         <SecureComponent>
             <SiteNavbar />
+            <SuccessAlert data={copyToClipboardAlert} clearData={setCopyToClipboardAlert} />
             <div className="page-wrapper">
                 <Navbar>
                     <NavGroup>
@@ -171,7 +176,7 @@ export default function Downloads({ tree }) {
                             )
                         })}
                     </div>
-                    <ul>
+                    <ul className={styles.mx_downloads_list}>
                         {Object.entries(visibleTree).map(([key, value], index) => {
                             return (
                                 <div key={index}>
@@ -180,11 +185,14 @@ export default function Downloads({ tree }) {
                                     >
                                         {value.type === "file" && <i className="fas fa-file"></i>}
                                         {value.type === "dir" && <i className="far fa-folder"></i>}
-                                        {key}
+                                        {key.toUpperCase()}
                                     </li>
                                     {
                                         value.type === "file" &&
-                                        <Button className="none" onClick={_ => LinkToClipboard(value.id)}>
+                                        <Button className="none" onClick={_ => {
+                                            LinkToClipboard(value.id);
+                                            setCopyToClipboardAlert("Link copied to clipboard!");
+                                        }}>
                                             <i className="fas fa-link" />
                                         </Button>
                                     }
@@ -235,6 +243,7 @@ function getSearchOptions(tree) {
 
 import { getRepoTree } from "./api/repo/tree";
 import axios from "axios";
+import { SuccessAlert } from "../components/alert";
 
 export async function getStaticProps({ params }) {
     const req = await getRepoTree();

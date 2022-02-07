@@ -30,6 +30,7 @@ export default function InventoryPage({ locations }) {
 
     // Category History
     const [viewCategoryHistory, setViewCategoryHistory] = useState(false);
+    const [selectedHistory, setSelectedHistory] = useState();
 
     // Add Item
     const [addItemModal, setAddItemModal] = useState(false);
@@ -54,7 +55,6 @@ export default function InventoryPage({ locations }) {
     const [checkoutItemModal, setCheckoutItemModal] = useState(false);
     const [checkoutUniqueItemModal, setCheckoutUniqueItemModal] = useState(false);
 
-    const [checkoutUniqueList, setCheckoutUniqueList] = useState([]);
     const [checkoutFinalList, setCheckoutFinalList] = useState([]);
 
     const checkoutAmountRef = useRef();
@@ -209,6 +209,15 @@ export default function InventoryPage({ locations }) {
         setCheckoutCart(copy);
     }
 
+    function closeUniqueCheckout() {
+        for (const item of checkoutFinalList) {
+            selectedItem.subItems.push(item);
+        }
+
+        setCheckoutFinalList([]);
+        setCheckoutUniqueItemModal(false);
+    }
+
     async function SubmitCheckout(e) {
         e.preventDefault();
 
@@ -240,16 +249,6 @@ export default function InventoryPage({ locations }) {
         }
 
         setItemNames(items);
-    }
-
-    function updateCheckoutUniqueList(items) {
-        const retList = [];
-
-        for (const item of items) {
-            retList.push(item.serial);
-        }
-
-        setCheckoutUniqueList(retList);
     }
 
     return (
@@ -383,6 +382,79 @@ export default function InventoryPage({ locations }) {
                             </Modal>
                         </NavGroup>
                         <NavGroup align="right">
+                            <Button onClick={_ => setViewCategoryHistory(true)}>History</Button>
+                            <Modal open={viewCategoryHistory} onClose={setViewCategoryHistory}>
+                                <Navbar>
+                                    <NavGroup>
+                                        <Select
+                                            options={[]} 
+                                        />
+                                    </NavGroup>
+                                </Navbar>
+                                <div className={styles.mx_inventory_history}>
+                                    <div className={styles.mx_inventory_history_list}>
+                                        {
+                                            selectedLocation &&
+                                            selectedLocation.history.map((notes, index) => {
+                                                return (
+                                                    <div 
+                                                        className={styles.mx_inventory_history_item} 
+                                                        key={index}
+                                                    >
+                                                        <Input
+                                                            simple
+                                                            placeholder="Username"
+                                                            defaultValue={notes.username}
+                                                            disabled 
+                                                        />
+                                                        <Input
+                                                            simple
+                                                            placeholder="Ticket"
+                                                            defaultValue={notes.ticket}
+                                                            disabled 
+                                                        />
+                                                        <TextArea label="Reason" defaultValue={notes.reason} readOnly />
+                                                        <Button onClick={_ => setSelectedHistory(notes)}>Items</Button>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                    <div className={styles.mx_inventory_history_item_list}>
+                                        <h1>Items - Ticket: {selectedHistory && selectedHistory.ticket}</h1>
+                                        <Table>
+                                            <TableHead top="0px">
+                                                <TableHCell>Category</TableHCell>
+                                                <TableHCell>Item</TableHCell>
+                                                <TableHCell>Serial/Amount</TableHCell>
+                                            </TableHead>
+                                            <TableBody>
+                                            {
+                                                selectedHistory &&
+                                                selectedHistory.items.map((item, index) => {
+                                                    return item.items.map((subItem, index1) => {
+                                                        return (
+                                                            <TableRow>
+                                                                <TableBCell>{item.category}</TableBCell>
+                                                                <TableBCell>{subItem.name}</TableBCell>
+                                                                <TableBCell>
+                                                                    {selectedLocation.categories.filter(
+                                                                        i => i.name === item.category
+                                                                    )[0].unique ?
+                                                                        subItem.serial :
+                                                                        subItem.amount
+                                                                    }
+                                                                </TableBCell>
+                                                            </TableRow>
+                                                        )
+                                                    })
+                                                })
+                                            }
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </div>
+                            </Modal>
                             <Button onClick={_ => setCheckoutViewModal(true)}>View Checkout</Button>
                             <Modal open={checkoutViewModal} onClose={setCheckoutViewModal}>
                                 <Form width="600px" onSubmit={SubmitCheckout}>
@@ -456,7 +528,7 @@ export default function InventoryPage({ locations }) {
                                             onClick={_ => selectCategory(cat)}
                                             selected={selectedCategory ? selectedCategory.name === cat.name : false}
                                         >
-                                            {cat.name}
+                                            {cat.name} ({cat.items.length})
                                         </GlassButton>
                                     )
                                 })
@@ -472,66 +544,6 @@ export default function InventoryPage({ locations }) {
                                         noShow
                                     />
                                 </NavGroup>
-                                <NavGroup align="right">
-                                    <Button onClick={_ => setViewCategoryHistory(true)}>History</Button>
-                                    <Modal open={viewCategoryHistory} onClose={setViewCategoryHistory}>
-                                        <div className={styles.mx_inventory_history}>
-                                            {
-                                                selectedCategory &&
-                                                selectedCategory.history.map((notes, index) => {
-                                                    console.log(notes)
-                                                    return (
-                                                        <div className={styles.mx_inventory_history_item} key={index}>
-                                                            <Input
-                                                                placeholder="User"
-                                                                defaultValue={notes.username}
-                                                                disabled
-                                                            />
-                                                            <div style={{ height: "200px", overflowY: "auto" }}>
-                                                                <Table>
-                                                                    <TableHead top="0px">
-                                                                        <TableHCell>Item</TableHCell>
-                                                                        <TableHCell>Value</TableHCell>
-                                                                        <TableHCell>{selectedCategory.unique ? "Serial" : "Amount"}</TableHCell>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                    {
-                                                                        notes.items.map((subItem, index1) => {
-                                                                            return (
-                                                                                <TableRow key={index1 + "cart" + index}>
-                                                                                    <TableBCell>{subItem.name}</TableBCell>
-                                                                                    <TableBCell>{subItem.value}</TableBCell>
-                                                                                    <TableBCell>
-                                                                                        {selectedCategory.unique ?
-                                                                                            subItem.serial :
-                                                                                            subItem.amount
-                                                                                        }
-                                                                                    </TableBCell>
-                                                                                </TableRow>
-                                                                            )
-                                                                        })
-                                                                    }
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </div>
-                                                            <TextArea
-                                                                label="Reason"
-                                                                defaultValue={notes.reason}
-                                                                readOnly
-
-                                                            />
-                                                            <Input
-                                                                placeholder="Ticket Number"
-                                                                defaultValue={notes.ticket}
-                                                                disabled
-                                                            />
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </div>
-                                    </Modal>
-                                </NavGroup>
                             </Navbar>
                             <div className={styles.mx_inventory_page_body_container}>
                                 {
@@ -544,6 +556,7 @@ export default function InventoryPage({ locations }) {
                                         }
                                     }).map((item, index) => {
                                         const units = selectedCategory.unique ? item.subItems.length : item.amount;
+                                        console.log(item)
                                         return (
                                             <div className={styles.mx_inventory_page_body_container_item} key={index + "item"}>
                                                 <h1>{item.name}</h1>
@@ -563,7 +576,6 @@ export default function InventoryPage({ locations }) {
                                                         onClick={_ => {
                                                             selectedCategory.unique ? setCheckoutUniqueItemModal(true) : setCheckoutItemModal(true);
                                                             setSelectedItem(item);
-                                                            updateCheckoutUniqueList(item.subItems);
                                                         }}
                                                         className="fas fa-shopping-cart"
                                                     />
@@ -732,7 +744,7 @@ export default function InventoryPage({ locations }) {
                                         </FormGroup>
                                     </Form>}
                                 </Modal>
-                                <Modal open={checkoutUniqueItemModal} onClose={setCheckoutUniqueItemModal}>
+                                <Modal open={checkoutUniqueItemModal} onClose={closeUniqueCheckout}>
                                     <Form width="400px" onSubmit={SubmitAddToCheckout}>
                                         <FormGroup>
                                             <h3>Available List</h3>

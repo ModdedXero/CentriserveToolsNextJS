@@ -58,10 +58,10 @@
 
 .mx_inventory_history {
     display: grid;
-    grid-template-columns: 32.25% 32.25% 32.25%;
+    grid-template-columns: 50% 50%;
     gap: 1.5%;
-    width: 1200px;
-    height: 600px;
+    width: 95vw;
+    height: 80vh;
     padding: 10px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -69,6 +69,12 @@
     box-shadow: var(--mx-blur-shadow-clear) var(--color-3);
     background: var(--mx-blur-bg);
     backdrop-filter: var(--mx-blur-filter);
+}
+
+.mx_inventory_history_list {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 1.5%;
 }
 
 .mx_inventory_history_item {
@@ -79,6 +85,16 @@
     height: fit-content;
 
     border: 1px solid var(--color-3);
+}
+
+.mx_inventory_history_item_list {
+    padding: 0 20px;
+    border-left: 1px solid var(--color-3);
+}
+
+.mx_inventory_history_item_list h1 {
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .mx_inventory_page_body_container {
