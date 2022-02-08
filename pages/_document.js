@@ -10,7 +10,7 @@ class MainDocument extends Document {
     return (
       <Html>
         <Head>
-          <script src="https://kit.fontawesome.com/4280a60692.js" crossorigin="anonymous"></script>
+          <script src="https://kit.fontawesome.com/4280a60692.js" crossOrigin="anonymous"></script>
         </Head>
         <body>
           <Main />
