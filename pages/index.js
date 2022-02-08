@@ -5,14 +5,13 @@ import SiteNavbar from "../components/built/site_navbar"
 
 // Create CSIT from cubes
 
-export default function Home({ tag }) {
+export default function Home() {
     return (
         <div className="page-container">
             <SiteNavbar />
             
             <div className="page-wrapper-full">
                 <div className="motd center">
-                    {tag}
                     test
                 </div>
                 <div className="box">
@@ -46,12 +45,4 @@ function RenderCubes() {
 // Returns random number between a range
 function getRandomNum(min, max) {
     return Math.random() * (max - min) + min;
-}
-
-export async function getStaticProps({ params }) {
-    const req = await axios.get("http://localhost:3000/api/motd");
-
-    return {
-        props: { tag: req.data }
-    }
 }

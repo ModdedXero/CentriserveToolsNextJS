@@ -89,7 +89,6 @@ export function AuthProvider({ children }) {
 }
 
 export function SecureComponent({ name=null, level=-1, failover="/", children }) {
-    const [loading, setLoading] = useState(true);
     const { ValidateToken, ValidateSecurity } = useAuth();
 
     useEffect(() => {
@@ -97,16 +96,14 @@ export function SecureComponent({ name=null, level=-1, failover="/", children })
             await ValidateToken();
             if (name && level) 
                 if (await ValidateSecurity(name, level) === -1) return Router.push(failover);
-            setLoading(false);
         }
 
-        setLoading(true);
         CheckValidate();
     }, [])
-
+    
     return (
         <div className="page-container">
-            {!loading && children}
+            {children}
         </div>
     )
 }

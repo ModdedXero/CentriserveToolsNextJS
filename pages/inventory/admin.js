@@ -47,7 +47,8 @@ export default function InventoryPage({ locations = [], categories = [] }) {
         const result = await axios.post("/api/inventory/locations/create", { name: createLocRef.current.value });
         if (result.status === 200) {
             locations.push(createLocRef.current.value);
-            setSuccessAlert(`Location ${createLocRef.current.value} deleted!`);
+            setAllLocations(locations);
+            setSuccessAlert(`Location ${createLocRef.current.value} created!`);
         }
         createLocRef.current.value = "";
         setCreateLocModal(false);
@@ -227,8 +228,8 @@ export default function InventoryPage({ locations = [], categories = [] }) {
                             }
                             </div>
                             <div className={styles.mx_inventory_body_admin_cat_btn}>
-                                <GlassButton onClick={_ => setCreateCatModal(true)}>Add</GlassButton>
-                                <GlassButton onClick={_ => setDeleteCatModal(true)}>Remove</GlassButton>
+                                <GlassButton onClick={_ => locations.length > 0 ? setCreateCatModal(true) : null}>Add</GlassButton>
+                                <GlassButton onClick={_ => currentCat ? setDeleteCatModal(true) : null}>Remove</GlassButton>
                                 <Modal open={createCatModal} onClose={setCreateCatModal}>
                                     <Form onSubmit={CreateCategory}>
                                         <FormGroup>

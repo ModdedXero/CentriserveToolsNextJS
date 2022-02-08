@@ -55,7 +55,9 @@ export default function Admin({ users }) {
                                 <Input
                                     key={selectedUser ? selectedUser.email + " Inventory" : "Inv"}
                                     simple 
-                                    defaultValue={selectedUser ? selectedUser.security.filter(i => i.name === "Inventory")[0].state : 0}
+                                    defaultValue={selectedUser && selectedUser.security.length > 0
+                                        ? 
+                                        selectedUser.security.filter(i => i.name === "Inventory")[0].state : 0}
                                     ref={inventoryRef}
                                     type="number" 
                                 />

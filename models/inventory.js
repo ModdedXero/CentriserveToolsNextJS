@@ -20,6 +20,8 @@ const itemSchema = new Schema({
     serial: String,
     customFields: [customFieldSchema],
     subItems: [{
+        price: Number,
+        value: Number,
         serial: String,
         customFields: [customFieldSchema]
     }]

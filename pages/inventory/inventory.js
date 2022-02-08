@@ -5,7 +5,7 @@ import { SecureComponent, useAuth } from "../../components/built/context";
 import SiteNavbar from "../../components/built/site_navbar";
 import InventoryNavbar from "../../components/built/inventory_navbar";
 import styles from "../../styles/inventory.module.css";
-import Button from "../../components/button";
+import Button, { SimpleButton } from "../../components/button";
 import { GlassButton } from "../../components/button";
 import { Navbar, NavGroup } from "../../components/navbar";
 import { Form, FormGroup } from "../../components/form";
@@ -48,9 +48,12 @@ export default function InventoryPage({ locations }) {
 
     // View/Edit Items
     const [selectedItem, setSelectedItem] = useState();
+    const [selectedItemCopy, setSelectedItemCopy] = useState();
 
     const [viewItemModal, setViewItemModal] = useState(false);
     const [viewUniqueItemModal, setViewUniqueItemModal] = useState(false);
+
+    const [editUniqueItemModal, setEditUniqueItemModal] = useState(false);
 
     // Checkout Item
     const [checkoutItemModal, setCheckoutItemModal] = useState(false);
@@ -151,6 +154,30 @@ export default function InventoryPage({ locations }) {
         }
         
         setAddItemModal(false);
+    }
+
+    async function SubmitEditItem(e) {
+        e.preventDefault();
+
+        const newItem = selectedItemCopy.name ? selectedItemCopy : {...selectedItem};
+        selectedItem.subItems[selectedItemCopy.index] = selectedItemCopy;
+
+        const result = await axios.post("/api/inventory/client/item/update", { 
+            location: selectedLocation.name,
+            category: selectedCategory.name,
+            oldItem: selectedItem,
+            newItem
+        });
+
+        if (result.status === 200) {
+            setSelectedCategory(undefined);
+            await SelectLocation(selectedLocation.name);
+            setSuccessAlert(`Item ${selectedItemCopy.name} has been updated!`);
+        }
+
+        setEditUniqueItemModal(false);
+        setViewItemModal(false);
+        setViewUniqueItemModal(false);
     }
 
     async function SubmitAddToCheckout(e) {
@@ -578,6 +605,7 @@ export default function InventoryPage({ locations }) {
                                                         onClick={_ => { 
                                                             selectedCategory.unique ? setViewUniqueItemModal(true) : setViewItemModal(true); 
                                                             setSelectedItem(item);
+                                                            setSelectedItemCopy(JSON.parse(JSON.stringify(item)));
                                                         }} 
                                                         className="fas fa-boxes"
                                                     />
@@ -586,6 +614,7 @@ export default function InventoryPage({ locations }) {
                                                         onClick={_ => {
                                                             selectedCategory.unique ? setCheckoutUniqueItemModal(true) : setCheckoutItemModal(true);
                                                             setSelectedItem(item);
+                                                            setSelectedItemCopy(JSON.parse(JSON.stringify(item)));
                                                         }}
                                                         className="fas fa-shopping-cart"
                                                     />}
@@ -594,64 +623,67 @@ export default function InventoryPage({ locations }) {
                                         )
                                     })
                                 }
-                                <Modal open={viewItemModal} onClose={setViewItemModal}>
-                                    {selectedItem &&
-                                    <Form width="600px" onSubmit={SubmitAddItem}>
+                                <Modal open={viewItemModal} onClose={_ => { setSelectedItemCopy(undefined); setViewItemModal(false); }}>
+                                    {selectedItemCopy &&
+                                    <Form width="600px" onSubmit={SubmitEditItem}>
                                         <FormGroup>
                                             <Input
                                                     simple
                                                     placeholder="Name"
-                                                    defaultValue={selectedItem.name}
-                                                    disabled
+                                                    defaultValue={selectedItemCopy.name}
+                                                    onChange={e => selectedItemCopy.name = e.target.value}
+                                                    disabled={security === -1}
                                             />
                                             <FormGroup horitontal>
                                                 <FormGroup horitontal>
                                                     <Input
                                                         simple
                                                         placeholder="Price"
-                                                        defaultValue={selectedItem.price}
-                                                        disabled
+                                                        type="number"
+                                                        step=".01"
+                                                        defaultValue={selectedItemCopy.price}
+                                                        onChange={e => selectedItemCopy.price = e.target.value}
+                                                        disabled={security === -1}
                                                     />
                                                     <Input
                                                         simple
                                                         placeholder="Value"
-                                                        defaultValue={selectedItem.value}
-                                                        disabled
+                                                        type="number"
+                                                        step=".01"
+                                                        defaultValue={selectedItemCopy.value}
+                                                        onChange={e => selectedItemCopy.value = e.target.value}
+                                                        disabled={security === -1}
                                                     />
                                                 </FormGroup>
                                                 <FormGroup horitontal>
-                                                    {selectedCategory &&
-                                                    !selectedCategory.unique &&
                                                     <Input
                                                         simple
                                                         placeholder="Amount"
-                                                        defaultValue={selectedItem.amount}
-                                                        disabled
-                                                    />}
-                                                    {selectedCategory &&
-                                                    !selectedCategory.unique &&
+                                                        type="number"
+                                                        step="1"
+                                                        defaultValue={selectedItemCopy.amount}
+                                                        onChange={e => selectedItemCopy.amount = e.target.value}
+                                                        disabled={security === -1}
+                                                    />
                                                     <Input
                                                         simple
                                                         placeholder="Min Amount"
-                                                        defaultValue={selectedItem.minAmount}
-                                                        disabled
-                                                    />}
+                                                        type="number"
+                                                        step="1"
+                                                        defaultValue={selectedItemCopy.minAmount}
+                                                        onChange={e => selectedItemCopy.minAmount = e.target.value}
+                                                        disabled={security === -1}
+                                                    />
                                                 </FormGroup>
                                             </FormGroup>
-                                            {selectedCategory &&
-                                            selectedCategory.unique &&
-                                            <Input
-                                                simple
-                                                placeholder="Serial Number"
-                                                disabled
-                                            />}
                                             {
-                                                selectedItem.customFields.map((field, index) => {
+                                                selectedItem &&
+                                                selectedItemCopy.customFields.map((field, index) => {
                                                     return (
                                                         <Input
                                                             key={index + "field"}
                                                             simple
-                                                            disabled
+                                                            disabled={security === -1}
                                                             placeholder={field.name}
                                                             defaultValue={field.value}
                                                         />
@@ -659,11 +691,15 @@ export default function InventoryPage({ locations }) {
                                                 })
                                             }
                                         </FormGroup>
+                                        {security !== -1 &&
+                                        <FormGroup final>
+                                            <Button>Edit Item</Button>
+                                        </FormGroup>}
                                     </Form>}
                                 </Modal>
                                 <Modal open={viewUniqueItemModal} onClose={setViewUniqueItemModal}>
                                     {selectedItem &&
-                                    <Form width="600px" onSubmit={SubmitAddItem}>
+                                    <Form width="600px" onSubmit={e => e.preventDefault()}>
                                         <FormGroup>
                                             <Input
                                                     simple
@@ -719,10 +755,80 @@ export default function InventoryPage({ locations }) {
                                                                     )
                                                                 })
                                                             }
+                                                            {security !== -1 && 
+                                                            <SimpleButton type="button" onClick={_ => {setEditUniqueItemModal(true); setSelectedItemCopy({...subItem, index})}}>
+                                                                Edit
+                                                            </SimpleButton>}
                                                         </div>
                                                     )
                                                 })
                                             }
+                                            {selectedItemCopy &&
+                                                <Modal zIndex={1001} open={editUniqueItemModal} onClose={_ => {setEditUniqueItemModal(false); setSelectedItemCopy(undefined)}}>
+                                                    <Form width="600px" onSubmit={SubmitEditItem}>
+                                                        <FormGroup>
+                                                            <FormGroup horitontal>
+                                                                <FormGroup>
+                                                                    {selectedItemCopy &&
+                                                                    <Input
+                                                                        simple
+                                                                        placeholder="Name"
+                                                                        defaultValue={selectedItem.name}
+                                                                        disabled
+                                                                    />}
+                                                                </FormGroup>
+                                                                <FormGroup horitontal>
+                                                                    <Input
+                                                                        simple
+                                                                        placeholder="Price"
+                                                                        type="number"
+                                                                        min={0}
+                                                                        step="0.01"
+                                                                        defaultValue={selectedItemCopy.price}
+                                                                        onChange={e => selectedItemCopy.price = e.target.value}
+                                                                    />
+                                                                    <Input
+                                                                        simple
+                                                                        placeholder="Value"
+                                                                        type="number"
+                                                                        min={0}
+                                                                        step="0.01"
+                                                                        defaultValue={selectedItemCopy.value}
+                                                                        onChange={e => selectedItemCopy.value = e.target.value}
+                                                                    />
+                                                                </FormGroup>
+                                                            </FormGroup>
+                                                            {selectedItemCopy &&
+                                                            <Input
+                                                                simple
+                                                                placeholder="Serial Number"
+                                                                defaultValue={selectedItemCopy.serial}
+                                                                onChange={e => selectedItemCopy.serial = e.target.value}
+                                                            />}
+                                                            {
+                                                                selectedItemCopy &&
+                                                                selectedItemCopy.customFields.map((field, index) => {
+                                                                    return (
+                                                                        <Input
+                                                                            simple
+                                                                            key={index + selectedItemCopy.serial}
+                                                                            placeholder={field.name}
+                                                                            type={field.type === "Number" ? "number" : "text"}
+                                                                            onChange={e => selectedItemCopy.customFields[index].value = e.target.value}
+                                                                            step="0.01"
+                                                                            min={0}
+                                                                        />
+                                                                    )
+                                                                })
+                                                            }
+                                                        </FormGroup>
+                                                        <FormGroup final>
+                                                            <Button>
+                                                                Submit
+                                                            </Button>
+                                                        </FormGroup>
+                                                    </Form>
+                                                </Modal>}
                                             </div>
                                         </FormGroup>
                                     </Form>}
