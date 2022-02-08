@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 import { SecureComponent, useAuth } from "../../components/built/context";
@@ -16,7 +16,8 @@ import Select from "../../components/select";
 
 export default function InventoryPage({ locations }) {
     // Current logged in user
-    const { currentUser } = useAuth();
+    const { currentUser, ValidateSecurity } = useAuth();
+    const [security, setSecurity] = useState();
 
     // Alert Messages
     const [successAlert, setSuccessAlert] = useState(null);
@@ -65,6 +66,14 @@ export default function InventoryPage({ locations }) {
 
     const checkoutReasonRef = useRef();
     const checkoutTicketRef = useRef();
+
+    useEffect(() => {
+        async function getSecurity() {
+            setSecurity(await ValidateSecurity("Inventory", 1));
+        }
+
+        getSecurity();
+    }, [currentUser])
 
     async function SelectLocation(loc) {
         setSelectedCategory(undefined);
@@ -265,9 +274,10 @@ export default function InventoryPage({ locations }) {
                             />
                         </NavGroup>
                         <NavGroup>
+                            {security !== -1 &&
                             <Button onClick={_ => selectedLocation ? setAddItemModal(true) : null}>
                                 Add Item
-                            </Button>
+                            </Button>}
                             <SuccessAlert data={successAlert} clearData={setSuccessAlert} />
                             <Modal open={addItemModal} onClose={setAddItemModal}>
                                 <Form width="600px" onSubmit={SubmitAddItem}>
@@ -434,7 +444,7 @@ export default function InventoryPage({ locations }) {
                                                 selectedHistory.items.map((item, index) => {
                                                     return item.items.map((subItem, index1) => {
                                                         return (
-                                                            <TableRow>
+                                                            <TableRow key={index1 + " " + index}>
                                                                 <TableBCell>{item.category}</TableBCell>
                                                                 <TableBCell>{subItem.name}</TableBCell>
                                                                 <TableBCell>
@@ -455,7 +465,7 @@ export default function InventoryPage({ locations }) {
                                     </div>
                                 </div>
                             </Modal>
-                            <Button onClick={_ => setCheckoutViewModal(true)}>View Checkout</Button>
+                            {security !== -1 && <Button onClick={_ => setCheckoutViewModal(true)}>View Checkout</Button>}
                             <Modal open={checkoutViewModal} onClose={setCheckoutViewModal}>
                                 <Form width="600px" onSubmit={SubmitCheckout}>
                                     <div className={styles.mx_inventory_checkout_list}>
@@ -556,7 +566,6 @@ export default function InventoryPage({ locations }) {
                                         }
                                     }).map((item, index) => {
                                         const units = selectedCategory.unique ? item.subItems.length : item.amount;
-                                        console.log(item)
                                         return (
                                             <div className={styles.mx_inventory_page_body_container_item} key={index + "item"}>
                                                 <h1>{item.name}</h1>
@@ -572,13 +581,14 @@ export default function InventoryPage({ locations }) {
                                                         }} 
                                                         className="fas fa-boxes"
                                                     />
+                                                    {security !== -1 &&
                                                     <i 
                                                         onClick={_ => {
                                                             selectedCategory.unique ? setCheckoutUniqueItemModal(true) : setCheckoutItemModal(true);
                                                             setSelectedItem(item);
                                                         }}
                                                         className="fas fa-shopping-cart"
-                                                    />
+                                                    />}
                                                 </div>
                                             </div>
                                         )

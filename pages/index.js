@@ -48,7 +48,7 @@ function getRandomNum(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticProps({ params }) {
     const req = await axios.get("http://localhost:3000/api/motd");
 
     return {

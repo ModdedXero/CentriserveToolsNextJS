@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
         Router.push("/login");
     }
 
-    async function Validate() {
+    async function ValidateToken() {
         const tokenString = JSON.parse(localStorage.getItem("token"));
         if (!tokenString || !Object.keys(tokenString).length) {
             console.log("No Token Found");
@@ -55,6 +55,13 @@ export function AuthProvider({ children }) {
         }
     }
 
+    async function ValidateSecurity(name, level) {
+        if (!currentUser) return -1;
+        const result = await axios.post("/api/auth/security", { username: currentUser.email, security: name });
+        if (result.data < level) return -1;
+        else return result.data;
+    }
+
     function setToken(token) {
         if (token) {
             localStorage.setItem("token", JSON.stringify(token));
@@ -70,7 +77,8 @@ export function AuthProvider({ children }) {
         Signup,
         Login,
         Logout,
-        Validate
+        ValidateToken,
+        ValidateSecurity
     };
 
     return (
@@ -80,13 +88,15 @@ export function AuthProvider({ children }) {
     )
 }
 
-export function SecureComponent({ children }) {
-    const [loading, setLoading] = useState();
-    const { Validate } = useAuth();
+export function SecureComponent({ name=null, level=-1, failover="/", children }) {
+    const [loading, setLoading] = useState(true);
+    const { ValidateToken, ValidateSecurity } = useAuth();
 
     useEffect(() => {
         async function CheckValidate() {
-            await Validate();
+            await ValidateToken();
+            if (name && level) 
+                if (await ValidateSecurity(name, level) === -1) return Router.push(failover);
             setLoading(false);
         }
 

@@ -145,7 +145,7 @@ export default function InventoryPage({ locations = [], categories = [] }) {
     }
 
     return (
-        <SecureComponent>
+        <SecureComponent name="Inventory" level={2} failover="/inventory">
             <SiteNavbar />
             <SuccessAlert data={successAlert} clearData={setSuccessAlert} />
             <div className={styles.mx_inventory_wrapper}>

@@ -4,9 +4,7 @@ const Schema = mongoose.Schema;
 
 const securitySchema = new Schema({
     name: String,
-    view: Boolean,
-    edit: Boolean,
-    admin: Boolean
+    state: Number
 })
 
 // Model used for a message on home page
