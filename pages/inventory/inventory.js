@@ -941,7 +941,7 @@ export default function InventoryPage({ locations }) {
 import { parseLocations } from "../api/inventory/locations";
 import { SuccessAlert } from "../../components/alert";
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     const locations = await parseLocations();
 
     return {

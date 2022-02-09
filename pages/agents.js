@@ -138,7 +138,7 @@ export default function Agents({ sites }) {
 
 import { getSites } from "../pages/api/agents/sites";
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     const req = await getSites();
 
     return {
