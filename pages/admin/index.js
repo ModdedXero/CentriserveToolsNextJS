@@ -74,7 +74,7 @@ export default function Admin({ users }) {
 
 import { getUserList } from "../api/auth/users";
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     const req = await getUserList();
 
     return {
