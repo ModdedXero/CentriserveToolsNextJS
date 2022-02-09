@@ -153,6 +153,7 @@ export default function InventoryPage({ locations }) {
             setSuccessAlert(`Item ${newItem.name} has been added!`);
         }
         
+        setItemCategory(undefined);
         setAddItemModal(false);
     }
 
@@ -293,7 +294,7 @@ export default function InventoryPage({ locations }) {
             <div className={styles.mx_inventory_wrapper}>
                 <InventoryNavbar />
                 <div className={styles.mx_inventory_page}>
-                    <Navbar>
+                    <Navbar top="0px">
                         <NavGroup>
                             <Select
                                 options={locations}
@@ -421,7 +422,7 @@ export default function InventoryPage({ locations }) {
                         <NavGroup align="right">
                             <Button onClick={_ => setViewCategoryHistory(true)}>History</Button>
                             <Modal open={viewCategoryHistory} onClose={setViewCategoryHistory}>
-                                <Navbar>
+                                <Navbar top="0px">
                                     <NavGroup>
                                         <Select
                                             options={[]} 
@@ -572,7 +573,7 @@ export default function InventoryPage({ locations }) {
                             }
                         </div>
                         <div className={styles.mx_inventory_page_body_wrapper}>
-                            <Navbar>
+                            <Navbar top="0px">
                                 <NavGroup>
                                     <Select
                                         search
@@ -814,6 +815,7 @@ export default function InventoryPage({ locations }) {
                                                                             key={index + selectedItemCopy.serial}
                                                                             placeholder={field.name}
                                                                             type={field.type === "Number" ? "number" : "text"}
+                                                                            defaultValue={selectedItemCopy.customFields[index].value}
                                                                             onChange={e => selectedItemCopy.customFields[index].value = e.target.value}
                                                                             step="0.01"
                                                                             min={0}

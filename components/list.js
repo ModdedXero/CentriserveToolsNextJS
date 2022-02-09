@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Input } from "./input";
 import { GlassButton, SimpleButton } from "./button";
@@ -8,6 +8,10 @@ export default function List({ options = [], refs, label, unique=true, sorted=tr
     const [internalList, setInternalList] = useState(options || []);
     const [query, setQuery] = useState("");
     const inputRef = useRef();
+
+    useEffect(() => {
+        if (refs) refs.current = options || [];
+    }, [refs])
 
     function OnQueryChange(e) {
         setQuery(e.target.value);

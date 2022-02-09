@@ -2,6 +2,7 @@
     position: relative;
     display: flex;
     height: 100%;
+    overflow: hidden;
 }
 
 .mx_inventory_page {
@@ -113,7 +114,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: fit-content;
+    height: 200px;
+    min-height: 117px;
     padding: 5px 10px;
 
     box-shadow: var(--mx-blur-shadow);
@@ -124,12 +126,15 @@
 .mx_inventory_page_body_container_item h1 {
     margin: 0;
     width: 80%;
+    height: 60%;
     word-wrap: break-word;
+    overflow-y: auto;
 }
 
 .mx_inventory_page_body_container_item > div {
     display: flex;
     margin: 0;
+    height: auto;
     margin-top: auto;
     overflow: auto;
     text-overflow: ellipsis;

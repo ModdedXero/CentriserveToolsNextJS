@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
     }
 
     async function ValidateToken() {
-        const tokenString = JSON.parse(localStorage.getItem("token"));
+        const tokenString = JSON.parse(sessionStorage.getItem("token"));
         if (!tokenString || !Object.keys(tokenString).length) {
             console.log("No Token Found");
             Logout();
@@ -64,10 +64,10 @@ export function AuthProvider({ children }) {
 
     function setToken(token) {
         if (token) {
-            localStorage.setItem("token", JSON.stringify(token));
+            sessionStorage.setItem("token", JSON.stringify(token));
             setCurrentUser(token);
         } else {
-            localStorage.removeItem("token");
+            sessionStorage.removeItem("token");
             setCurrentUser(undefined);
         }
     }

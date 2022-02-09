@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 
 import styles from "../styles/navbar.module.css";
 
-export function Navbar({ children, zIndex, vertical=false, width }) {
+export function Navbar({ children, zIndex, top=0, vertical=false, width }) {
     const [sticky, setSticky] = useState();
     const navRef = useRef();
 
     useEffect(() => {
-        setSticky(navRef.current.getBoundingClientRect().top);
+        setSticky(top || navRef.current.getBoundingClientRect().top);
     }, [])
 
     if (vertical) {
