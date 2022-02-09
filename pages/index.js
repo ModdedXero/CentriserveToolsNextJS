@@ -12,7 +12,7 @@ export default function Home() {
             
             <div className="page-wrapper-full">
                 <div className="motd center">
-                    test
+                    Please enjoy the new site, built with love!
                 </div>
                 <div className="box">
                     <MxCanvas>
