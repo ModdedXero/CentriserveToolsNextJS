@@ -76,7 +76,7 @@ export default function InventoryPage({ locations }) {
         }
 
         getSecurity();
-    }, [currentUser])
+    }, [])
 
     async function SelectLocation(loc) {
         setSelectedCategory(undefined);
