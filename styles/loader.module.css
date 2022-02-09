@@ -1,0 +1,8 @@
+.mx_loader {
+    display: flex;
+    margin: auto;
+    font-size: 1.8rem;
+}
+.mx_loader .animate-spin {
+    margin: 0 auto;
+}

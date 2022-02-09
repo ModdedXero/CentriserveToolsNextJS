@@ -2,7 +2,6 @@ import axios from "axios"
 import { useState } from "react";
 import fileDownload from "js-file-download";
 
-import { SecureComponent } from "../components/built/context";
 import ChartTable from "../components/pages/agents/chart_table";
 import SiteNavbar from "../components/built/site_navbar";
 import { Navbar, NavGroup } from "../components/navbar";
@@ -61,7 +60,7 @@ export default function Agents({ sites }) {
     }
 
     return (
-        <SecureComponent>
+        <div className="page-container">
             <SiteNavbar />
             <div className="page-wrapper">
                 <Navbar>
@@ -132,7 +131,7 @@ export default function Agents({ sites }) {
                     </TableBody>
                 </Table>
             </div>
-        </SecureComponent>
+        </div>
     )
 }
 

@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Router from "next/router";
 
+import PageLoader from "./page_loader";
+
 const AuthContext = React.createContext();
 
 export function useAuth() {
@@ -10,6 +12,21 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(undefined);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        async function Validate() {
+            const user = await validateToken();
+            const security = await validateSecurity(user);
+            if (!security) return Router.push("/login");
+
+            user.security = security;
+            setCurrentUser(user);
+            setIsLoading(false);
+        }
+
+        Validate();
+    }, [])
 
     async function Signup(username, password) {
         let result = await axios.post("/api/auth/signup", { email: username, password: password });
@@ -37,12 +54,24 @@ export function AuthProvider({ children }) {
         Router.push("/login");
     }
 
-    async function ValidateToken() {
+    function GetSecurity(name) {
+        if (!currentUser || !currentUser.security) return -1;
+        
+        for (const val of currentUser.security) {
+            if (val.name === name) {
+                return val.state;
+            }
+        }
+
+        return -1;
+    }
+
+    async function validateToken() {
         const tokenString = JSON.parse(sessionStorage.getItem("token"));
         if (!tokenString || !Object.keys(tokenString).length) {
             console.log("No Token Found");
             Logout();
-            return false;
+            return null;
         }
 
         const result = await axios.post("/api/auth/validate", 
@@ -51,15 +80,14 @@ export function AuthProvider({ children }) {
         if (result.status === 204) return Router.push("/login");
         else {
             setToken(tokenString);
-            return true;
+            return tokenString;
         }
     }
 
-    async function ValidateSecurity(name, level) {
-        if (!currentUser) return -1;
-        const result = await axios.post("/api/auth/security", { username: currentUser.email, security: name });
-        if (!result.data || result.data < level) return -1;
-        else return result.data;
+    async function validateSecurity(user) {
+        if (!user) return null;
+        const result = await axios.post("/api/auth/security", { username: user.email });
+        return result.data;
     }
 
     function setToken(token) {
@@ -77,33 +105,12 @@ export function AuthProvider({ children }) {
         Signup,
         Login,
         Logout,
-        ValidateToken,
-        ValidateSecurity
+        GetSecurity
     };
 
     return (
         <AuthContext.Provider value={values}>
             {children}
         </AuthContext.Provider>
-    )
-}
-
-export function SecureComponent({ name=null, level=-1, failover="/", children }) {
-    const { ValidateToken, ValidateSecurity } = useAuth();
-
-    useEffect(() => {
-        async function CheckValidate() {
-            await ValidateToken();
-            if (name && level) 
-                if (await ValidateSecurity(name, level) === -1) return Router.push(failover);
-        }
-
-        CheckValidate();
-    }, [])
-    
-    return (
-        <div className="page-container">
-            {children}
-        </div>
     )
 }

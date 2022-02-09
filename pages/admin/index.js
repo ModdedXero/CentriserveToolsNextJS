@@ -41,7 +41,7 @@ export default function Admin({ users }) {
     }
 
     return (
-        <SecureComponent>
+        <div className="page-container">
             <div className={styles.mx_admin_page}>
                 <Select
                     options={usernames}
@@ -72,7 +72,7 @@ export default function Admin({ users }) {
                 <br />
                 <Button onClick={UpdateUser}>Update User</Button>
             </div>
-        </SecureComponent>
+        </div>
     )
 }
 

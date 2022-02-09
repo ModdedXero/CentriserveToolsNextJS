@@ -5,7 +5,7 @@ import styles from "../../styles/inventory.module.css";
 
 export default function InventoryPage() {
     return (
-        <SecureComponent>
+        <div className="page-container">
             <SiteNavbar />
             <div className={styles.mx_inventory_wrapper}>
                 <InventoryNavbar />
@@ -13,6 +13,6 @@ export default function InventoryPage() {
                     Dashboard
                 </div>
             </div>
-        </SecureComponent>
+        </div>
     )
 }

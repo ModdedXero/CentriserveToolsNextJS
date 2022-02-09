@@ -6,20 +6,9 @@ import { GlassButton } from "../button";
 import { useAuth } from "./context";
 
 export default function InventoryNavbar() {
-    const { ValidateSecurity } = useAuth();
+    const { GetSecurity } = useAuth();
 
     const [url, setUrl] = useState("");
-    const [security, setSecurity] = useState();
-
-    useEffect(() => {
-        setUrl(window.location.pathname);
-
-        async function getSecurity() {
-            setSecurity(await ValidateSecurity("Inventory", 0));
-        }
-
-        getSecurity();
-    }, [])
 
     return (
         <Navbar vertical width="150px">
@@ -36,7 +25,7 @@ export default function InventoryNavbar() {
                     Projects
                 </GlassButton>
             </NavGroup>
-            {security >= 2 &&
+            {GetSecurity("Inventory") >= 2 &&
             <NavGroup align="final">
                 <GlassButton selected={url === "/inventory/admin"} onClick={_ => Router.push("/inventory/admin")} thick>
                     Admin

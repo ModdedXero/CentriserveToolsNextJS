@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { SuccessAlert } from "../../components/alert";
 import axios from "axios";
 
-import { SecureComponent, useAuth } from "../../components/built/context";
+import { useAuth } from "../../components/built/context";
 import SiteNavbar from "../../components/built/site_navbar";
 import InventoryNavbar from "../../components/built/inventory_navbar";
 import styles from "../../styles/inventory.module.css";
@@ -16,8 +17,7 @@ import Select from "../../components/select";
 
 export default function InventoryPage({ locations }) {
     // Current logged in user
-    const { currentUser, ValidateSecurity } = useAuth();
-    const [security, setSecurity] = useState();
+    const { currentUser, GetSecurity } = useAuth();
 
     // Alert Messages
     const [successAlert, setSuccessAlert] = useState(null);
@@ -59,7 +59,6 @@ export default function InventoryPage({ locations }) {
     const [checkoutUniqueItemModal, setCheckoutUniqueItemModal] = useState(false);
 
     const [checkoutFinalList, setCheckoutFinalList] = useState([]);
-
     const checkoutAmountRef = useRef();
 
     // Checkout View
@@ -68,14 +67,6 @@ export default function InventoryPage({ locations }) {
 
     const checkoutReasonRef = useRef();
     const checkoutTicketRef = useRef();
-
-    useEffect(() => {
-        async function getSecurity() {
-            setSecurity(await ValidateSecurity("Inventory", 1));
-        }
-
-        getSecurity();
-    }, [])
 
     async function SelectLocation(loc) {
         setSelectedCategory(undefined);
@@ -287,7 +278,7 @@ export default function InventoryPage({ locations }) {
     }
 
     return (
-        <SecureComponent>
+        <div className="page-container">
             <SiteNavbar />
             <div className={styles.mx_inventory_wrapper}>
                 <InventoryNavbar />
@@ -300,7 +291,7 @@ export default function InventoryPage({ locations }) {
                             />
                         </NavGroup>
                         <NavGroup>
-                            {security !== -1 &&
+                            {GetSecurity("Inventory") >= 1 &&
                             <Button onClick={_ => selectedLocation ? setAddItemModal(true) : null}>
                                 Add Item
                             </Button>}
@@ -491,7 +482,7 @@ export default function InventoryPage({ locations }) {
                                     </div>
                                 </div>
                             </Modal>
-                            {security !== -1 && <Button onClick={_ => setCheckoutViewModal(true)}>View Checkout</Button>}
+                            {GetSecurity("Inventory") >= 1 && <Button onClick={_ => setCheckoutViewModal(true)}>View Checkout</Button>}
                             <Modal open={checkoutViewModal} onClose={setCheckoutViewModal}>
                                 <Form width="600px" onSubmit={SubmitCheckout}>
                                     <div className={styles.mx_inventory_checkout_list}>
@@ -608,7 +599,7 @@ export default function InventoryPage({ locations }) {
                                                         }} 
                                                         className="fas fa-boxes"
                                                     />
-                                                    {security !== -1 &&
+                                                    {GetSecurity("Inventory") >= 1 &&
                                                     <i 
                                                         onClick={_ => {
                                                             selectedCategory.unique ? setCheckoutUniqueItemModal(true) : setCheckoutItemModal(true);
@@ -631,7 +622,7 @@ export default function InventoryPage({ locations }) {
                                                     placeholder="Name"
                                                     defaultValue={selectedItemCopy.name}
                                                     onChange={e => selectedItemCopy.name = e.target.value}
-                                                    disabled={security === -1}
+                                                    disabled={GetSecurity("Inventory") >= 1}
                                             />
                                             <FormGroup horitontal>
                                                 <FormGroup horitontal>
@@ -642,7 +633,7 @@ export default function InventoryPage({ locations }) {
                                                         step=".01"
                                                         defaultValue={selectedItemCopy.price}
                                                         onChange={e => selectedItemCopy.price = e.target.value}
-                                                        disabled={security === -1}
+                                                        disabled={GetSecurity("Inventory") >= 1}
                                                     />
                                                     <Input
                                                         simple
@@ -651,7 +642,7 @@ export default function InventoryPage({ locations }) {
                                                         step=".01"
                                                         defaultValue={selectedItemCopy.value}
                                                         onChange={e => selectedItemCopy.value = e.target.value}
-                                                        disabled={security === -1}
+                                                        disabled={GetSecurity("Inventory") >= 1}
                                                     />
                                                 </FormGroup>
                                                 <FormGroup horitontal>
@@ -662,7 +653,7 @@ export default function InventoryPage({ locations }) {
                                                         step="1"
                                                         defaultValue={selectedItemCopy.amount}
                                                         onChange={e => selectedItemCopy.amount = e.target.value}
-                                                        disabled={security === -1}
+                                                        disabled={GetSecurity("Inventory") >= 1}
                                                     />
                                                     <Input
                                                         simple
@@ -671,7 +662,7 @@ export default function InventoryPage({ locations }) {
                                                         step="1"
                                                         defaultValue={selectedItemCopy.minAmount}
                                                         onChange={e => selectedItemCopy.minAmount = e.target.value}
-                                                        disabled={security === -1}
+                                                        disabled={GetSecurity("Inventory") >= 1}
                                                     />
                                                 </FormGroup>
                                             </FormGroup>
@@ -682,7 +673,7 @@ export default function InventoryPage({ locations }) {
                                                         <Input
                                                             key={index + "field"}
                                                             simple
-                                                            disabled={security === -1}
+                                                            disabled={GetSecurity("Inventory") >= 1}
                                                             placeholder={field.name}
                                                             defaultValue={field.value}
                                                         />
@@ -690,7 +681,7 @@ export default function InventoryPage({ locations }) {
                                                 })
                                             }
                                         </FormGroup>
-                                        {security !== -1 &&
+                                        {GetSecurity("Inventory") >= 1 &&
                                         <FormGroup final>
                                             <Button>Edit Item</Button>
                                         </FormGroup>}
@@ -754,7 +745,7 @@ export default function InventoryPage({ locations }) {
                                                                     )
                                                                 })
                                                             }
-                                                            {security !== -1 && 
+                                                            {GetSecurity("Inventory") >= 1 && 
                                                             <SimpleButton type="button" onClick={_ => {setEditUniqueItemModal(true); setSelectedItemCopy({...subItem, index})}}>
                                                                 Edit
                                                             </SimpleButton>}
@@ -932,12 +923,11 @@ export default function InventoryPage({ locations }) {
                     </div>
                 </div>
             </div>
-        </SecureComponent>
+        </div>
     )
 }
 
 import { parseLocations } from "../api/inventory/locations";
-import { SuccessAlert } from "../../components/alert";
 
 export async function getServerSideProps({ params }) {
     const locations = await parseLocations();
