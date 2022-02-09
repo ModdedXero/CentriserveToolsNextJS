@@ -36,7 +36,6 @@ export default function InventoryPage({ locations }) {
     // Add Item
     const [addItemModal, setAddItemModal] = useState(false);
     const [itemCategory, setItemCategory] = useState();
-    const [addItemError, setAddItemError] = useState();
 
     const itemNameRef = useRef(0);
     const itemPriceRef = useRef();
@@ -137,7 +136,6 @@ export default function InventoryPage({ locations }) {
 
         // TODO: Add error for input
         if (error) {
-            setAddItemError(error);
             return;
         };
 

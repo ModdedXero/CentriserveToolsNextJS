@@ -58,7 +58,7 @@ export function AuthProvider({ children }) {
     async function ValidateSecurity(name, level) {
         if (!currentUser) return -1;
         const result = await axios.post("/api/auth/security", { username: currentUser.email, security: name });
-        if (result.data < level) return -1;
+        if (!result.data || result.data < level) return -1;
         else return result.data;
     }
 
