@@ -245,7 +245,7 @@ import { getRepoTree } from "./api/repo/tree";
 import axios from "axios";
 import { SuccessAlert } from "../components/alert";
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     const req = await getRepoTree();
 
     return {
