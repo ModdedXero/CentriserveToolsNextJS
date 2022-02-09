@@ -16,10 +16,14 @@ export default function Admin({ users }) {
     const inventoryRef = useRef();
 
     useEffect(() => {
+        const ret = [];
+
         for (const user of users) {
-            usernames.push(user.email);
+            ret.push(user.email);
         }
-    }, [users])
+
+        setUsernames(ret);
+    }, [])
 
     function UpdateUser() {
         const newSecurity = [
