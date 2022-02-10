@@ -19,40 +19,44 @@
     padding: 0 60px;
 }
 
-.mx_navbar_container .mx_navbar_group,
-.mx_navbar_container .mx_navbar_group_final {
+.mx_navbar_group,
+.mx_navbar_group_final,
+.mx_navbar_group_center {
     position: relative;
     display: flex;
     gap: 20px;
 }
-.mx_navbar_container .mx_navbar_group_final {
+.mx_navbar_group_final {
     margin-left: auto;
 }
-.mx_navbar_container .mx_navbar_group_final button {
+.mx_navbar_group_final button {
     height: 100%;
 }
+.mx_navbar_group_center {
+    margin: 0 auto;
+}
 
-.mx_navbar_container .mx_navbar_dropdown {
+.mx_navbar_dropdown {
     position: relative;
     display: inline-block;
 }
-.mx_navbar_container .mx_navbar_dropdown:hover div,
-.mx_navbar_container .mx_navbar_dropdown div:hover {
+.mx_navbar_dropdown:hover div,
+.mx_navbar_dropdown div:hover {
     max-height: 1000px;
 }
 
-.mx_navbar_container .mx_navbar_dropdown button {
+.mx_navbar_dropdown button {
     background-color: transparent;
     color: white;
     font-size: 16px;
     border: none;
     cursor: pointer;
 }
-.mx_navbar_container .mx_navbar_dropdown button:hover {
+.mx_navbar_dropdown button:hover {
     color: var(--color-3);
 }
 
-.mx_navbar_container .mx_navbar_dropdown div {
+.mx_navbar_dropdown div {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -67,7 +71,7 @@
     transition: all 0.35s ease-in-out;
 }
 
-.mx_navbar_container .mx_navbar_dropdown div a {
+.mx_navbar_dropdown div a {
     padding: 10px;
 }
 

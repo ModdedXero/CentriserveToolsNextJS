@@ -44,6 +44,9 @@ export function NavGroup({ children, align }) {
         case "final":
             className = styles.mx_navbar_group_final;
             break;
+        case "center":
+            className = styles.mx_navbar_group_center;
+            break;
         default:
             className = styles.mx_navbar_group;
     }

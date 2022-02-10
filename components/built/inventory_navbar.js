@@ -10,6 +10,10 @@ export default function InventoryNavbar() {
 
     const [url, setUrl] = useState("");
 
+    useEffect(() => {
+        setUrl(window.location.pathname);
+    }, [])
+
     return (
         <Navbar vertical width="150px">
             <NavGroup>
