@@ -1,8 +1,27 @@
 .mx_loader {
     display: flex;
+    flex-direction: column;
     margin: auto;
     font-size: 1.8rem;
 }
-.mx_loader .animate-spin {
+.mx_loader svg {
     margin: 0 auto;
+    font-size: 3rem;
+    animation: rotate 0.5s infinite ease-in-out;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(90deg);
+    }
+    75% {
+        transform: rotate(315deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

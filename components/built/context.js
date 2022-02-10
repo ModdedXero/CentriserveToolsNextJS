@@ -18,11 +18,16 @@ export function AuthProvider({ children }) {
         async function Validate() {
             const user = await validateToken();
             const security = await validateSecurity(user);
-            if (!security) return Router.push("/login");
+            if (!security) {
+                Router.push("/login");
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                setIsLoading(false);
+            } else {
+                if (user) user.security = security;
 
-            user.security = security;
-            setCurrentUser(user);
-            setIsLoading(false);
+                setCurrentUser(user);
+                setIsLoading(false);
+            }
         }
 
         Validate();
@@ -108,9 +113,11 @@ export function AuthProvider({ children }) {
         GetSecurity
     };
 
+    if (isLoading) return <PageLoader />
+
     return (
         <AuthContext.Provider value={values}>
-            {children}
+            {!isLoading && children}
         </AuthContext.Provider>
     )
 }
