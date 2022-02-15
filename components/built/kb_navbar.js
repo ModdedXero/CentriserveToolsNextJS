@@ -4,7 +4,7 @@ import { Navbar, NavGroup, NavDropdown, NavLink } from "../navbar"
 import Button from "../button";
 import Select from "../select";
 
-export default function KBNavbar() {
+export default function WikiNavbar() {
     const [query, setQuery] = useState();
 
     return (

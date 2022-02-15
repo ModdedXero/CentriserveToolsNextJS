@@ -1,4 +1,4 @@
-.mx_kb {
+.mx_wiki {
     display: flex;
     flex-direction: column;
     position: relative;
@@ -7,7 +7,7 @@
     margin: auto;
 }
 
-.mx_kb_body {
+.mx_wiki_body {
     width: 100%;
     height: 100%;
 

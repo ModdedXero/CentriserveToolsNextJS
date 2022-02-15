@@ -17,6 +17,7 @@ export default function SiteNavbar() {
                 <NavLink href="/agents">Agents</NavLink>
                 <NavLink href="/downloads">Downloads</NavLink>
                 <NavLink href="/inventory">Inventory</NavLink>
+                <NavLink href="/wiki">Wiki</NavLink>
             </NavGroup>
             <NavGroup align="right">
                 {!currentUser && 
